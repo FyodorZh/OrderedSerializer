@@ -1,6 +1,6 @@
 ﻿namespace BinarySerializer
 {
-    public interface IDataStruct
+    public interface IDataClass
     {
         void Serialize(IBinarySerializer serializer);
     }
