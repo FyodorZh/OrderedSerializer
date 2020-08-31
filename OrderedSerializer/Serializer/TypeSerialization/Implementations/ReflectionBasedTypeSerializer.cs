@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Reflection;
 
 namespace OrderedSerializer.TypeSerializers
 {
@@ -7,15 +6,14 @@ namespace OrderedSerializer.TypeSerializers
     {
         public void Serialize(IWriter writer, Type type)
         {
-            string typeName = type.FullName;
+            string typeName = type.AssemblyQualifiedName;
             writer.WriteString(typeName);
         }
 
         public Type Deserialize(IReader reader)
         {
             string typeName = reader.ReadString();
-            var assembly = Assembly.GetEntryAssembly();
-            return assembly.GetType(typeName);
+            return Type.GetType(typeName);
         }
     }
 }

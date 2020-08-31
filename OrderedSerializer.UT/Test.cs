@@ -54,12 +54,6 @@ namespace OrderedSerializer
             r0.a.y = 7;
             r0.a.hello = "hello";
 
-            int hc1 = r0.a.GetHashCode();
-            int hc2 = r0.a.self.GetHashCode();
-
-
-            ReflectionBasedTypeSerializer typeSerializer = new ReflectionBasedTypeSerializer();
-
             byte[] data;
             byte[] typeData;
             {
@@ -69,19 +63,17 @@ namespace OrderedSerializer
 
                 writer.AddClass(ref r0);
 
-                writer.Finish(typeSerializer);
+                writer.Finish(new ReflectionBasedTypeSerializer());
 
                 data = dataWriter.GetBuffer();
                 typeData = typeWriter.GetBuffer();
             }
 
             {
-                var binaryReader = new BinarySource.BinaryReader(data);
+                var dataReader = new BinarySource.BinaryReader(data);
+                var typeDataReader = new BinarySource.BinaryReader(typeData);
 
-                TypeMap typeMap = new TypeMap();
-                typeMap.Deserialize(new BinarySource.BinaryReader(typeData), typeSerializer);
-
-                IOrderedSerializer reader = new Deserializer(binaryReader, typeMap);
+                IOrderedSerializer reader = new Deserializer(dataReader, typeDataReader,  new ReflectionBasedTypeSerializer());
 
                 Root r1 = null;
                 reader.AddClass(ref r1);

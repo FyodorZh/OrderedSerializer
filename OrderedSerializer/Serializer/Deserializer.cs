@@ -20,12 +20,15 @@ namespace OrderedSerializer
 
         public int Version { get; }
 
-        public Deserializer(IReader reader, IFactory factory)
+        public Deserializer(IReader dataReader, IReader typeDataReader, ITypeDeserializer typeDeserializer)
         {
-            _reader = reader;
-            _factory = factory;
+            _reader = dataReader;
 
-            Version = reader.ReadInt();
+            TypeMap typeMap = new TypeMap();
+            typeMap.Deserialize(typeDataReader, typeDeserializer);
+            _factory = typeMap;
+
+            Version = dataReader.ReadInt();
         }
 
         public void Add(ref bool value)

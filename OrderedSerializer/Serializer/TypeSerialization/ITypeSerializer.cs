@@ -6,9 +6,4 @@ namespace OrderedSerializer
     {
         void Serialize(IWriter writer, Type type);
     }
-
-    public interface ITypeDeserializer
-    {
-        Type Deserialize(IReader reader);
-    }
 }
