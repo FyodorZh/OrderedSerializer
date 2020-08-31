@@ -1,4 +1,4 @@
-﻿﻿using System;
+﻿using System;
 using System.Collections.Generic;
 
  namespace OrderedSerializer
@@ -7,6 +7,7 @@ using System.Collections.Generic;
     {
         private readonly Dictionary<Type, int> _map = new Dictionary<Type, int>();
         private readonly List<Type> _types = new List<Type>();
+        private readonly List<IConstructor> _constructors = new List<IConstructor>();
 
         public int GetTypeId(Type type)
         {
@@ -15,6 +16,7 @@ using System.Collections.Generic;
                 id = _map.Count;
                 _map.Add(type, id);
                 _types.Add(type);
+                _constructors.Add(ConstructCtor(type));
             }
 
             return id;
@@ -34,6 +36,7 @@ using System.Collections.Generic;
         {
             _types.Clear();
             _map.Clear();
+            _constructors.Clear();
 
             int count = reader.ReadInt();
             for (int i = 0; i < count; ++i)
@@ -41,12 +44,35 @@ using System.Collections.Generic;
                 Type type = typeDeserializer.Deserialize(reader);
                 _map.Add(type, _types.Count);
                 _types.Add(type);
+                _constructors.Add(ConstructCtor(type));
             }
         }
 
         public object Construct(int typeId)
         {
-            return _types[typeId].GetConstructor(new Type[0]).Invoke(new object[0]);
+            return _constructors[typeId].Construct();
+        }
+
+        private IConstructor ConstructCtor(Type type)
+        {
+            Type genericCtor = typeof(TypeCtor<>);
+            Type typeCtor = genericCtor.MakeGenericType(new Type[] {type});
+
+            return (IConstructor)typeCtor.GetConstructor(new Type[0]).Invoke(new object[0]);
+        }
+
+        private interface IConstructor
+        {
+            object Construct();
+        }
+
+        private class TypeCtor<T> : IConstructor
+            where T : class, new()
+        {
+            public object Construct()
+            {
+                return new T();
+            }
         }
     }
 }
