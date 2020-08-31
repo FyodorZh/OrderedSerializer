@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace BinarySerializer
+namespace OrderedSerializer
 {
     public interface ITypeSerializer
     {

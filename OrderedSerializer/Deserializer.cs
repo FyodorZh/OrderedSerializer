@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace BinarySerializer
+namespace OrderedSerializer
 {
     public interface IFactory
     {
         object Construct(int typeId);
     }
 
-    public class Deserializer : IBinarySerializer
+    public class Deserializer : IOrderedSerializer
     {
         private readonly IReader _reader;
 

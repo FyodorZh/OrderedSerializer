@@ -1,4 +1,4 @@
-﻿namespace BinarySerializer
+﻿namespace OrderedSerializer
 {
     public interface ISerializer
     {
@@ -22,7 +22,7 @@
     {
     }
 
-    public interface IBinarySerializer : IPrimitiveSerializer
+    public interface IOrderedSerializer : IPrimitiveSerializer
     {
         void AddStruct<T>(ref T value) where T : struct, IDataStruct;
         void AddClass<T>(ref T value) where T : class, IDataClass;

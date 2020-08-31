@@ -1,4 +1,4 @@
-﻿namespace BinarySerializer
+﻿namespace OrderedSerializer
 {
     public interface IWriter
     {

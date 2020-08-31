@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 
-namespace BinarySerializer
+namespace OrderedSerializer
 {
-    public class Serializer : IBinarySerializer
+    public class Serializer : IOrderedSerializer
     {
         private readonly IWriter _writer;
         private readonly IWriter _typeWriter;

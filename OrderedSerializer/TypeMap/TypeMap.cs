@@ -1,7 +1,7 @@
 ﻿﻿using System;
 using System.Collections.Generic;
 
- namespace BinarySerializer
+ namespace OrderedSerializer
 {
     public class TypeMap : IFactory
     {

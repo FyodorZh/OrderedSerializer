@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 
-namespace BinarySerializer.TypeSerializers
+namespace OrderedSerializer.TypeSerializers
 {
     public class ReflectionBasedTypeSerializer : ITypeSerializer, ITypeDeserializer
     {
