@@ -46,6 +46,9 @@ namespace OrderedSerializer
         [Test]
         public void DoTest()
         {
+            var guid = typeof(Root).GUID;
+
+
             Root r0 = new Root();
             r0.sa = new SA();
             r0.sa.x = 3;
@@ -63,7 +66,7 @@ namespace OrderedSerializer
 
                 writer.AddClass(ref r0);
 
-                writer.Finish(new ReflectionBasedTypeSerializer());
+                writer.Finish(new TypenameBasedTypeSerializer());
 
                 data = dataWriter.GetBuffer();
                 typeData = typeWriter.GetBuffer();
@@ -73,7 +76,7 @@ namespace OrderedSerializer
                 var dataReader = new BinarySource.BinaryReader(data);
                 var typeDataReader = new BinarySource.BinaryReader(typeData);
 
-                IOrderedSerializer reader = new Deserializer(dataReader, typeDataReader,  new ReflectionBasedTypeSerializer());
+                IOrderedSerializer reader = new Deserializer(dataReader, typeDataReader,  new TypenameBasedTypeDeserializer());
 
                 Root r1 = null;
                 reader.AddClass(ref r1);
