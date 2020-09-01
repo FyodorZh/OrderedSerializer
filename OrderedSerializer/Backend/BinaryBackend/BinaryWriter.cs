@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace OrderedSerializer.BinarySource
+namespace OrderedSerializer.BinaryBackend
 {
     public class BinaryWriter : IWriter
     {

@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using OrderedSerializer.TypeSerializers;
 
 namespace OrderedSerializer
@@ -60,8 +59,8 @@ namespace OrderedSerializer
             byte[] data;
             byte[] typeData;
             {
-                var dataWriter = new BinarySource.BinaryWriter();
-                var typeWriter = new BinarySource.BinaryWriter();
+                var dataWriter = new BinaryBackend.BinaryWriter();
+                var typeWriter = new BinaryBackend.BinaryWriter();
                 Serializer writer = new Serializer(dataWriter, typeWriter, 1);
 
                 writer.AddClass(ref r0);
@@ -73,8 +72,8 @@ namespace OrderedSerializer
             }
 
             {
-                var dataReader = new BinarySource.BinaryReader(data);
-                var typeDataReader = new BinarySource.BinaryReader(typeData);
+                var dataReader = new BinaryBackend.BinaryReader(data);
+                var typeDataReader = new BinaryBackend.BinaryReader(typeData);
 
                 IOrderedSerializer reader = new Deserializer(dataReader, typeDataReader,  new TypenameBasedTypeDeserializer());
 

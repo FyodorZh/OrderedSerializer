@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using NUnit.Framework;
-using OrderedSerializer.BinarySource;
+using OrderedSerializer.BinaryBackend;
 
 namespace OrderedSerializer
 {

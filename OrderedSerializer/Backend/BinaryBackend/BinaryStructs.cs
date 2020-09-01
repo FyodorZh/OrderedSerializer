@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace OrderedSerializer.BinarySource
+namespace OrderedSerializer.BinaryBackend
 {
     [StructLayout(LayoutKind.Explicit)]
     internal struct CharToByte
