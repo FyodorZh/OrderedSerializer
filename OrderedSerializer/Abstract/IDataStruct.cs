@@ -4,4 +4,8 @@
     {
         void Serialize(IOrderedSerializer serializer);
     }
+
+    public interface IVersionedDataStruct : IDataStruct, IVersionedData
+    {
+    }
 }

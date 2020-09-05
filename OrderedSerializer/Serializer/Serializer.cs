@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace OrderedSerializer
 {
@@ -13,16 +14,15 @@ namespace OrderedSerializer
 
         public bool IsWriter => true;
 
-        public int Version { get; }
+        public byte Version => throw new InvalidOperationException();
 
-        public Serializer(IWriter dataWriter, IWriter typeWriter, int version)
+        public Serializer(IWriter dataWriter, IWriter typeWriter, byte defaultVersion)
         {
             _writer = dataWriter;
             _typeWriter = typeWriter;
 
             _typeMap = new TypeMap();
-            Version = version;
-            _writer.WriteInt(version);
+            _writer.WriteByte(defaultVersion);
         }
 
         public void Finish(ITypeSerializer typeSerializer)
@@ -60,14 +60,54 @@ namespace OrderedSerializer
             _writer.WriteString(value);
         }
 
+        private void AddClass<T>(IDataStruct value, bool isAbstract)
+        {
+            if (_instanceMap.TryGetValue(value, out int instanceId))
+            {
+                instanceId = -(instanceId + 1);
+                _writer.WriteInt(instanceId);
+            }
+            else
+            {
+                instanceId = _instanceMap.Count;
+                _instanceMap.Add(value, instanceId);
+                instanceId = -(instanceId + 1);
+
+                int typeId = _typeMap.GetTypeId(value.GetType()) + 1;
+                _writer.WriteInt(typeId);
+                _writer.WriteInt(instanceId);
+
+                _writer.BeginSection();
+                value.Serialize(this);
+                _writer.EndSection();
+            }
+
+
+            if (isAbstract)
+            {
+
+            }
+            else
+            {
+                value.Serialize(this);
+            }
+        }
+
         public void AddStruct<T>(ref T value)
             where T : struct, IDataStruct
         {
             value.Serialize(this);
         }
 
+        public void AddVersionedStruct<T>(ref T value)
+            where T : struct, IDataStruct, IVersionedData
+        {
+            _writer.WriteByte(value.Version);
+            value.Serialize(this);
+        }
+
         public void AddClass<T>(ref T value)
-            where T : class, IDataClass
+            where T : class, IDataStruct
         {
             if (value == null)
             {
@@ -87,10 +127,15 @@ namespace OrderedSerializer
                     instanceId = -(instanceId + 1);
 
                     int typeId = _typeMap.GetTypeId(value.GetType()) + 1;
+
                     _writer.WriteInt(typeId);
                     _writer.WriteInt(instanceId);
 
                     _writer.BeginSection();
+                    if (value is IVersionedData versionedData)
+                    {
+                        _writer.WriteByte(versionedData.Version);
+                    }
                     value.Serialize(this);
                     _writer.EndSection();
                 }

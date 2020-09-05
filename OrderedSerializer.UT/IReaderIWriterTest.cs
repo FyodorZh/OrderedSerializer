@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 using OrderedSerializer.BinaryBackend;
+using OrderedSerializer.StructuredBinaryBackend;
 
 namespace OrderedSerializer
 {
@@ -16,6 +17,16 @@ namespace OrderedSerializer
                 BinaryWriter bw = (BinaryWriter)w;
                 var buffer = bw.GetBuffer();
                 return new BinaryReader(buffer);
+            });
+        }
+
+        [Test]
+        public void StructuredBinaryTest()
+        {
+            Check(GetList(), () => new StructuredBinaryWriter(), w =>
+            {
+                StructuredBinaryWriter bw = (StructuredBinaryWriter)w;
+                return bw.ConstructReader();
             });
         }
 
@@ -80,23 +91,23 @@ namespace OrderedSerializer
                 {
                     Assert.AreEqual((Byte)obj, reader.ReadByte());
                 }
-                if (obj is Char)
+                else if (obj is Char)
                 {
                     Assert.AreEqual((Char)obj, reader.ReadChar());
                 }
-                if (obj is int)
+                else if (obj is int)
                 {
                     Assert.AreEqual((int)obj, reader.ReadInt());
                 }
-                if (obj is long)
+                else if (obj is long)
                 {
                     Assert.AreEqual((long)obj, reader.ReadLong());
                 }
-                if (obj is string)
+                else if (obj is string)
                 {
                     Assert.AreEqual((string)obj, reader.ReadString());
                 }
-                if (obj == null)
+                else if (obj == null)
                 {
                     Assert.AreEqual(null, reader.ReadString());
                 }

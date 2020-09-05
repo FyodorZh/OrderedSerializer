@@ -4,7 +4,7 @@
     {
         bool IsWriter { get; }
 
-        int Version { get; }
+        byte Version { get; }
     }
 
     public interface IPrimitiveSerializer<T> : ISerializer
@@ -25,6 +25,6 @@
     public interface IOrderedSerializer : IPrimitiveSerializer
     {
         void AddStruct<T>(ref T value) where T : struct, IDataStruct;
-        void AddClass<T>(ref T value) where T : class, IDataClass;
+        void AddClass<T>(ref T value) where T : class, IDataStruct;
     }
 }

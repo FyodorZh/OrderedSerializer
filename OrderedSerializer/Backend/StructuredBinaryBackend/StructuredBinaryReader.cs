@@ -44,7 +44,7 @@ namespace OrderedSerializer.StructuredBinaryBackend
 
         public byte ReadByte()
         {
-            Record r = _section[_position];
+            Record r = _section[_position++];
             CheckType(r, RecordType.Byte);
             checked
             {
@@ -54,7 +54,7 @@ namespace OrderedSerializer.StructuredBinaryBackend
 
         public char ReadChar()
         {
-            Record r = _section[_position];
+            Record r = _section[_position++];
             CheckType(r, RecordType.Char);
             checked
             {
@@ -64,7 +64,7 @@ namespace OrderedSerializer.StructuredBinaryBackend
 
         public int ReadInt()
         {
-            Record r = _section[_position];
+            Record r = _section[_position++];
             CheckType(r, RecordType.Int);
             checked
             {
@@ -74,14 +74,14 @@ namespace OrderedSerializer.StructuredBinaryBackend
 
         public long ReadLong()
         {
-            Record r = _section[_position];
+            Record r = _section[_position++];
             CheckType(r, RecordType.Long);
             return r.Value;
         }
 
         public string ReadString()
         {
-            Record r = _section[_position];
+            Record r = _section[_position++];
             CheckType(r, RecordType.String);
             return r.Text;
         }

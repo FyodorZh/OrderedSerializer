@@ -16,9 +16,12 @@ namespace OrderedSerializer
 
         private readonly Dictionary<int, object> _instanceMap = new Dictionary<int, object>();
 
+        private readonly Stack<byte> _versions = new Stack<byte>();
+        private byte _version;
+
         public bool IsWriter => false;
 
-        public int Version { get; }
+        public byte Version => _version;
 
         public Deserializer(IReader dataReader, IReader typeDataReader, ITypeDeserializer typeDeserializer)
         {
@@ -28,7 +31,7 @@ namespace OrderedSerializer
             typeMap.Deserialize(typeDataReader, typeDeserializer);
             _factory = typeMap;
 
-            Version = dataReader.ReadInt();
+            _version = dataReader.ReadByte();
         }
 
         public void Add(ref bool value)
@@ -77,8 +80,18 @@ namespace OrderedSerializer
             value.Serialize(this);
         }
 
+        public void AddVersionedStruct<T>(ref T value)
+            where T : struct, IDataStruct, IVersionedData
+        {
+            var version = _reader.ReadByte();
+            _versions.Push(_version);
+            _version = version;
+            value.Serialize(this);
+            _version = _versions.Pop();
+        }
+
         public void AddClass<T>(ref T value)
-            where T : class, IDataClass
+            where T : class, IDataStruct
         {
             int flag = _reader.ReadInt();
 
@@ -88,14 +101,31 @@ namespace OrderedSerializer
             }
             else if (flag > 0) // NEW INSTANCE
             {
+                int typeId = flag - 1;
                 int instanceId = -_reader.ReadInt() - 1;
 
                 _reader.BeginSection();
-                value = _factory.Construct(flag - 1) as T;
+                value = _factory.Construct(typeId) as T;
                 if (value != null)
                 {
                     _instanceMap.Add(instanceId, value);
-                    value.Serialize(this);
+                    if (value is IVersionedData versionedData)
+                    {
+                        var version = _reader.ReadByte();
+
+                        _versions.Push(version);
+                        _version = version;
+                        value.Serialize(this);
+                        _version = _versions.Pop();
+                    }
+                    else
+                    {
+                        value.Serialize(this);
+                    }
+                }
+                else
+                {
+                    // We don't know this type
                 }
                 _reader.EndSection();
             }

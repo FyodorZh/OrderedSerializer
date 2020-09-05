@@ -13,7 +13,7 @@ namespace OrderedSerializer
         }
     }
 
-    class CA : IDataClass
+    class CA : IDataStruct, IVersionedData
     {
         public int y;
         public string hello;
@@ -21,13 +21,19 @@ namespace OrderedSerializer
 
         public void Serialize(IOrderedSerializer serializer)
         {
+            if (!serializer.IsWriter)
+            {
+                Assert.IsTrue(serializer.Version == this.Version);
+            }
             serializer.Add(ref y);
             serializer.Add(ref hello);
             serializer.AddClass(ref self);
         }
+
+        public byte Version => 134;
     }
 
-    class Root : IDataClass
+    class Root : IDataStruct
     {
         public CA a;
         public SA sa;
