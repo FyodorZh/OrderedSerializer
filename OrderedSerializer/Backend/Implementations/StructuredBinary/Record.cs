@@ -7,6 +7,7 @@ namespace OrderedSerializer.StructuredBinaryBackend
     {
         Byte,
         Char,
+        Short,
         Int,
         Long,
         String,
@@ -31,6 +32,14 @@ namespace OrderedSerializer.StructuredBinaryBackend
         public Record(Char value)
         {
             Type = RecordType.Char;
+            Value = value;
+            Text = null;
+            Section = null;
+        }
+
+        public Record(short value)
+        {
+            Type = RecordType.Short;
             Value = value;
             Text = null;
             Section = null;
@@ -79,6 +88,9 @@ namespace OrderedSerializer.StructuredBinaryBackend
                 case RecordType.Char:
                     writer.WriteChar((char)Value);
                     break;
+                case RecordType.Short:
+                    writer.WriteShort((short)Value);
+                    break;
                 case RecordType.Int:
                     writer.WriteInt((int)Value);
                     break;
@@ -111,6 +123,8 @@ namespace OrderedSerializer.StructuredBinaryBackend
                     return new Record(reader.ReadByte());
                 case RecordType.Char:
                     return new Record(reader.ReadChar());
+                case RecordType.Short:
+                    return new Record(reader.ReadShort());
                 case RecordType.Int:
                     return new Record(reader.ReadInt());
                 case RecordType.Long:

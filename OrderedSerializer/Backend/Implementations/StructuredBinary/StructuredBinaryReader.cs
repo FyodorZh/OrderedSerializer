@@ -36,10 +36,12 @@ namespace OrderedSerializer.StructuredBinaryBackend
             _position = 0;
         }
 
-        public void EndSection()
+        public bool EndSection()
         {
+            bool isOk = _position == _section.Count;
             _position = _positions.Pop();
             _section = _sections.Pop();
+            return isOk;
         }
 
         public byte ReadByte()
@@ -59,6 +61,16 @@ namespace OrderedSerializer.StructuredBinaryBackend
             checked
             {
                 return (char)r.Value;
+            }
+        }
+
+        public short ReadShort()
+        {
+            Record r = _section[_position++];
+            CheckType(r, RecordType.Short);
+            checked
+            {
+                return (short)r.Value;
             }
         }
 

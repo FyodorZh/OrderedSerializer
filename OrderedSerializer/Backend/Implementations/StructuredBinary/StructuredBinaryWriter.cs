@@ -60,6 +60,11 @@ namespace OrderedSerializer.StructuredBinaryBackend
             _section.Add(new Record(value));
         }
 
+        public void WriteShort(short value)
+        {
+            _section.Add(new Record(value));
+        }
+
         public void WriteInt(int value)
         {
             _section.Add(new Record(value));

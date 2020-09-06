@@ -3,10 +3,11 @@
     public interface IReader
     {
         void BeginSection();
-        void EndSection();
+        bool EndSection();
 
         byte ReadByte();
         char ReadChar();
+        short ReadShort();
         int ReadInt();
         long ReadLong();
         string ReadString();

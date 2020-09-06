@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using OrderedSerializer.StructuredBinaryBackend;
 using OrderedSerializer.TypeSerializers;
 
 namespace OrderedSerializer
@@ -62,26 +63,23 @@ namespace OrderedSerializer
             r0.a.y = 7;
             r0.a.hello = "hello";
 
-            byte[] data;
-            byte[] typeData;
+            StructuredBinaryReader dataReader;
             {
-                var dataWriter = new BinaryBackend.BinaryWriter();
-                var typeWriter = new BinaryBackend.BinaryWriter();
-                Serializer writer = new Serializer(dataWriter, typeWriter, 1);
+                var dataWriter = new StructuredBinaryWriter();
+                var writer = new GraphSerializer(dataWriter, new TypenameBasedTypeSerializer(), 1);
 
                 writer.AddClass(ref r0);
 
-                writer.Finish(new TypenameBasedTypeSerializer());
-
-                data = dataWriter.GetBuffer();
-                typeData = typeWriter.GetBuffer();
+                dataReader = dataWriter.ConstructReader();
             }
 
             {
-                var dataReader = new BinaryBackend.BinaryReader(data);
-                var typeDataReader = new BinaryBackend.BinaryReader(typeData);
+                var reader = new GraphDeserializer(dataReader, new TypenameBasedTypeDeserializer());
 
-                IOrderedSerializer reader = new Deserializer(dataReader, typeDataReader,  new TypenameBasedTypeDeserializer());
+                reader.OnException += (ex) =>
+                {
+                    Assert.Fail(ex.ToString());
+                };
 
                 Root r1 = null;
                 reader.AddClass(ref r1);

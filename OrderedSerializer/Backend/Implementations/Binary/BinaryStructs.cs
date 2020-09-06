@@ -11,6 +11,14 @@ namespace OrderedSerializer.BinaryBackend
     }
 
     [StructLayout(LayoutKind.Explicit)]
+    internal struct ShortToByte
+    {
+        [FieldOffset(0)] public short Value;
+        [FieldOffset(0)] public byte Byte0;
+        [FieldOffset(1)] public byte Byte1;
+    }
+
+    [StructLayout(LayoutKind.Explicit)]
     internal struct IntToByte
     {
         [FieldOffset(0)] public int Value;

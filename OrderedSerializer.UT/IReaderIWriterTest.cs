@@ -39,6 +39,8 @@ namespace OrderedSerializer
                 'x',
                 'z',
                 '\0',
+                (short)400,
+                (short)-1,
                 1,
                 -7,
                 -100000,
@@ -64,6 +66,10 @@ namespace OrderedSerializer
                 if (obj is Char)
                 {
                     writer.WriteChar((Char)obj);
+                }
+                if (obj is short)
+                {
+                    writer.WriteShort((short)obj);
                 }
                 if (obj is int)
                 {
@@ -94,6 +100,10 @@ namespace OrderedSerializer
                 else if (obj is Char)
                 {
                     Assert.AreEqual((Char)obj, reader.ReadChar());
+                }
+                else if (obj is short)
+                {
+                    Assert.AreEqual((short)obj, reader.ReadShort());
                 }
                 else if (obj is int)
                 {

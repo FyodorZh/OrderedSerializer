@@ -75,6 +75,14 @@ namespace OrderedSerializer.BinaryBackend
             _buffer[_size++] = block.Byte1;
         }
 
+        public void WriteShort(short value)
+        {
+            ShortToByte block = new ShortToByte() {Value = value};
+            Grow(2);
+            _buffer[_size++] = block.Byte0;
+            _buffer[_size++] = block.Byte1;
+        }
+
         public void WriteInt(int value)
         {
             IntToByte block = new IntToByte() {Value = value};
