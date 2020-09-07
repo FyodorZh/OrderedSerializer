@@ -146,5 +146,28 @@ namespace OrderedSerializer.StructuredBinaryBackend
                     throw new ArgumentOutOfRangeException();
             }
         }
+
+        public override string ToString()
+        {
+            switch (Type)
+            {
+                case RecordType.Byte:
+                    return "byte:" + Value;
+                case RecordType.Char:
+                    return "char:" + (char)Value;
+                case RecordType.Short:
+                    return "short:" + Value;
+                case RecordType.Int:
+                    return "int:" + Value;
+                case RecordType.Long:
+                    return "long:" + Value;
+                case RecordType.String:
+                    return "text:" + Text;
+                case RecordType.Section:
+                    return "Section[" + Section.Count + "]";
+                default:
+                    return "INVALID_TYPE_" + Type;
+            }
+        }
     }
 }

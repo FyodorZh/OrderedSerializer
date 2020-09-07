@@ -25,6 +25,7 @@
         byte Version { get; }
 
         void AddStruct<T>(ref T value) where T : struct, IDataStruct;
+        void AddVersionedStruct<T>(ref T value) where T : struct, IDataStruct, IVersionedData;
         void AddClass<T>(ref T value) where T : class, IDataStruct;
     }
 }
