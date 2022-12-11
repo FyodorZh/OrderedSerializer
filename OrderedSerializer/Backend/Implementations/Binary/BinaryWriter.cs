@@ -42,7 +42,11 @@ namespace OrderedSerializer.BinaryBackend
             Buffer.BlockCopy(_buffer, 0, res, 0, _size);
             return res;
         }
-
+        public byte[] GetBufferUnsafe(out int sise)
+        {
+            sise = _size;
+            return _buffer;
+        }
         public void BeginSection()
         {
             _sectionsStack.Push(_size);
@@ -96,6 +100,30 @@ namespace OrderedSerializer.BinaryBackend
         public void WriteLong(long value)
         {
             LongToByte block = new LongToByte() {Value = value};
+            Grow(8);
+            _buffer[_size++] = block.Byte0;
+            _buffer[_size++] = block.Byte1;
+            _buffer[_size++] = block.Byte2;
+            _buffer[_size++] = block.Byte3;
+            _buffer[_size++] = block.Byte4;
+            _buffer[_size++] = block.Byte5;
+            _buffer[_size++] = block.Byte6;
+            _buffer[_size++] = block.Byte7;
+        }
+
+        public void WriteFloat(float value)
+        {
+            FloatToByte block = new FloatToByte() { Value = value };
+            Grow(4);
+            _buffer[_size++] = block.Byte0;
+            _buffer[_size++] = block.Byte1;
+            _buffer[_size++] = block.Byte2;
+            _buffer[_size++] = block.Byte3;
+        }
+
+        public void WriteDouble(double value)
+        {
+            DoubleToByte block = new DoubleToByte() { Value = value };
             Grow(8);
             _buffer[_size++] = block.Byte0;
             _buffer[_size++] = block.Byte1;

@@ -6,19 +6,33 @@ namespace OrderedSerializer.BinaryBackend
 {
     public class BinaryReader : IReader
     {
-        private readonly byte[] _buffer;
+        private byte[] _buffer;
 
         private readonly Stack<int> _stackOfSections = new Stack<int>();
         private int _maxPosition;
 
         private int _position = 0;
 
-        public BinaryReader(byte[] buffer)
+        public BinaryReader(byte[] buffer, int count = -1)
         {
             _buffer = buffer;
-            _maxPosition = buffer.Length;
+            _maxPosition = count >= 0 ? count : buffer.Length;
         }
 
+        public void Reset(byte[] newBuffer, int count = -1)
+        {
+            _buffer = newBuffer;
+            _maxPosition = count >= 0 ? count : newBuffer.Length;
+            _stackOfSections.Clear();
+            _position = 0;
+        }
+
+        public virtual void Reset()
+        {
+            _stackOfSections.Clear();
+            _position = 0;
+        }
+        
         public void BeginSection()
         {
             int size = ReadInt();
@@ -104,6 +118,38 @@ namespace OrderedSerializer.BinaryBackend
                 Byte5 = _buffer[_position++],
                 Byte6 = _buffer[_position++],
                 Byte7 = _buffer[_position++]
+            };
+
+            return block.Value;
+        }
+
+        public float ReadFloat()
+        {
+            Check(4);
+            FloatToByte block = new FloatToByte()
+            {
+                Byte0 = _buffer[_position++],
+                Byte1 = _buffer[_position++],
+                Byte2 = _buffer[_position++],
+                Byte3 = _buffer[_position++],
+            };
+
+            return block.Value;
+        }
+
+        public double ReadDouble()
+        {
+            Check(8);
+            DoubleToByte block = new DoubleToByte()
+            {
+                Byte0 = _buffer[_position++],
+                Byte1 = _buffer[_position++],
+                Byte2 = _buffer[_position++],
+                Byte3 = _buffer[_position++],
+                Byte4 = _buffer[_position++],
+                Byte5 = _buffer[_position++],
+                Byte6 = _buffer[_position++],
+                Byte7 = _buffer[_position++],
             };
 
             return block.Value;

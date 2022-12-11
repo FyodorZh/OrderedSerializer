@@ -5,11 +5,14 @@ namespace OrderedSerializer.StructuredBinaryBackend
 {
     public enum RecordType : byte
     {
+        Unknown,
         Byte,
         Char,
         Short,
         Int,
         Long,
+        Float,
+        Double,
         String,
         Section
     }
@@ -17,7 +20,7 @@ namespace OrderedSerializer.StructuredBinaryBackend
     public readonly struct Record
     {
         public readonly RecordType Type;
-        public readonly long Value;
+        public readonly TypeAlias Value;
         public readonly string Text;
         public readonly List<Record> Section;
 
@@ -61,6 +64,22 @@ namespace OrderedSerializer.StructuredBinaryBackend
             Section = null;
         }
 
+        public Record(float value)
+        {
+            Type = RecordType.Float;
+            Value = value;
+            Text = null;
+            Section = null;
+        }
+
+        public Record(double value)
+        {
+            Type = RecordType.Double;
+            Value = value;
+            Text = null;
+            Section = null;
+        }
+
         public Record(string value)
         {
             Type = RecordType.String;
@@ -77,37 +96,54 @@ namespace OrderedSerializer.StructuredBinaryBackend
             Section = value;
         }
 
+        public Record Clone()
+        {
+            List<Record> list = new List<Record>(Section.Count);
+            foreach (var record in Section)
+            {
+                list.Add(record.Clone());
+            }
+
+            return new Record(list);
+        }
+
         public void WriteTo(IWriter writer)
         {
             writer.WriteByte((byte)Type);
             switch (Type)
             {
                 case RecordType.Byte:
-                    writer.WriteByte((byte)Value);
+                    writer.WriteByte(Value.ByteValue);
                     break;
                 case RecordType.Char:
-                    writer.WriteChar((char)Value);
+                    writer.WriteChar(Value.CharValue);
                     break;
                 case RecordType.Short:
-                    writer.WriteShort((short)Value);
+                    writer.WriteShort(Value.ShortValue);
                     break;
                 case RecordType.Int:
-                    writer.WriteInt((int)Value);
+                    writer.WriteInt(Value.IntValue);
                     break;
                 case RecordType.Long:
-                    writer.WriteLong(Value);
+                    writer.WriteLong(Value.LongValue);
+                    break;
+                case RecordType.Float:
+                    writer.WriteFloat(Value.FloatValue);
+                    break;
+                case RecordType.Double:
+                    writer.WriteDouble(Value.DoubleValue);
                     break;
                 case RecordType.String:
                     writer.WriteString(Text);
                     break;
                 case RecordType.Section:
+                {
+                    writer.WriteInt(Section.Count);
+                    foreach (var element in Section)
                     {
-                        writer.WriteInt(Section.Count);
-                        foreach (var element in Section)
-                        {
-                            element.WriteTo(writer);
-                        }
+                        element.WriteTo(writer);
                     }
+                }
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -132,16 +168,17 @@ namespace OrderedSerializer.StructuredBinaryBackend
                 case RecordType.String:
                     return new Record(reader.ReadString());
                 case RecordType.Section:
+                {
+                    int count = reader.ReadInt();
+                    List<Record> section = new List<Record>(count);
+                    for (int i = 0; i < count; ++i)
                     {
-                        int count = reader.ReadInt();
-                        List<Record> section = new List<Record>(count);
-                        for (int i = 0; i < count; ++i)
-                        {
-                            Record r = ReadFrom(reader);
-                            section.Add(r);
-                        }
-                        return new Record(section);
+                        Record r = ReadFrom(reader);
+                        section.Add(r);
                     }
+
+                    return new Record(section);
+                }
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -152,15 +189,19 @@ namespace OrderedSerializer.StructuredBinaryBackend
             switch (Type)
             {
                 case RecordType.Byte:
-                    return "byte:" + Value;
+                    return "byte:" + Value.ByteValue;
                 case RecordType.Char:
-                    return "char:" + (char)Value;
+                    return "char:" + Value.CharValue;
                 case RecordType.Short:
-                    return "short:" + Value;
+                    return "short:" + Value.ShortValue;
                 case RecordType.Int:
-                    return "int:" + Value;
+                    return "int:" + Value.IntValue;
                 case RecordType.Long:
-                    return "long:" + Value;
+                    return "long:" + Value.LongValue;
+                case RecordType.Float:
+                    return "float:" + Value.FloatValue;
+                case RecordType.Double:
+                    return "double:" + Value.DoubleValue;
                 case RecordType.String:
                     return "text:" + Text;
                 case RecordType.Section:

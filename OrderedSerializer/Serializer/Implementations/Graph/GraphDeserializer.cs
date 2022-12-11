@@ -12,8 +12,8 @@ namespace OrderedSerializer
 
         private readonly List<InstanceInfo> _instances = new List<InstanceInfo>();
 
-        public GraphDeserializer(IReader reader, ITypeDeserializer typeDeserializer)
-            : base(reader, typeDeserializer)
+        public GraphDeserializer(IReader reader, ITypeDeserializer typeDeserializer, ISerializerExtensionsFactory factory = null)
+            : base(reader, typeDeserializer, factory)
         {
         }
 

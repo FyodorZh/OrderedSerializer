@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace OrderedSerializer
 {
@@ -14,15 +15,31 @@ namespace OrderedSerializer
 
         public event Action<Exception> OnException;
 
-        public byte Version => _version;
+        private readonly ISerializerExtensionsFactory _factory;
 
-        public HierarchicalDeserializer(IReader reader, ITypeDeserializer typeDeserializer)
+        public byte Version => _version;
+        
+        public HierarchicalDeserializer(IReader reader, ITypeDeserializer typeDeserializer, ISerializerExtensionsFactory factory = null)
             : base(reader)
         {
+            factory ??= SerializerExtensionsFactory.Instance;
+            factory.OnError += (type, exception) =>
+            {
+                OnException?.Invoke(exception);
+            };
+            _factory = factory;
+
             _typeDeserializer = typeDeserializer;
-            _version = reader.ReadByte();
+            Reset();
         }
 
+        public void Reset()
+        {
+            _reader.Reset();
+            _versions.Clear();
+            _typeMap.Clear();
+            _version = _reader.ReadByte();
+        }
         public void AddStruct<T>(ref T value)
             where T : struct, IDataStruct
         {
@@ -63,6 +80,11 @@ namespace OrderedSerializer
                     var type = _typeDeserializer.Deserialize(_reader);
                     ctor = type != null ? TypeConstructorBuilder.Build(type) : NullConstructor.Instance;
                     _typeMap[typeId] = ctor;
+
+                    if (!ctor.IsValid)
+                    {
+                        OnException?.Invoke(new InvalidOperationException($"Failed to construct '{type}'. It must have private or public default constructor"));
+                    }
                 }
 
                 _reader.BeginSection();
@@ -71,9 +93,17 @@ namespace OrderedSerializer
 
                 if (!_reader.EndSection())
                 {
-                    OnException?.Invoke(new InvalidOperationException());
+                    OnException?.Invoke(new InvalidOperationException("Failed to deserialize object section. Skip it"));
                 }
             }
+        }
+
+        public void AddAny<T>(ref T value)
+        {
+            var extension = _factory.Construct<T>();
+            if (extension == null)
+                throw new InvalidOperationException($"{typeof(T)} must be recognizable by extensions factory");
+            extension.Add(this, ref value);
         }
 
         protected virtual T DeserializeClass<T>(IConstructor ctor)
@@ -116,6 +146,7 @@ namespace OrderedSerializer
 
         protected interface IConstructor
         {
+            bool IsValid { get; }
             object Construct();
         }
 
@@ -123,9 +154,34 @@ namespace OrderedSerializer
         {
             public static readonly IConstructor Instance = new NullConstructor();
 
+            public bool IsValid => false;
+
             public object Construct()
             {
                 return null;
+            }
+        }
+
+        private class ReflectionBasedConstructor : IConstructor
+        {
+            private static readonly object[] VoidObjectList = new object[0];
+
+            private readonly ConstructorInfo _ctorInfo;
+
+            public bool IsValid => _ctorInfo != null;
+
+            public ReflectionBasedConstructor(Type type)
+            {
+                _ctorInfo = type.GetConstructor(BindingFlags.CreateInstance |
+                                                BindingFlags.Instance |
+                                                BindingFlags.Public |
+                                                BindingFlags.NonPublic,
+                    null, new Type[0], null);
+            }
+
+            public object Construct()
+            {
+                return _ctorInfo?.Invoke(VoidObjectList);
             }
         }
 
@@ -134,18 +190,26 @@ namespace OrderedSerializer
             private class TypeConstructor<T> : IConstructor
                 where T : class, new()
             {
+                public bool IsValid => true;
+
                 public object Construct()
                 {
                     return new T();
                 }
             }
 
+            private static readonly Type[] VoidTypeList = new Type[0];
+
             public static IConstructor Build(Type type)
             {
-                Type genericCtor = typeof(TypeConstructor<>);
-                Type typeCtor = genericCtor.MakeGenericType(new Type[] {type});
+                if (type.GetConstructor(VoidTypeList) != null)
+                {
+                    Type genericCtor = typeof(TypeConstructor<>);
+                    Type typeCtor = genericCtor.MakeGenericType(new Type[] {type});
+                    return (IConstructor)typeCtor.GetConstructor(new Type[0]).Invoke(new object[0]);
+                }
 
-                return (IConstructor)typeCtor.GetConstructor(new Type[0]).Invoke(new object[0]);
+                return new ReflectionBasedConstructor(type);
             }
         }
     }

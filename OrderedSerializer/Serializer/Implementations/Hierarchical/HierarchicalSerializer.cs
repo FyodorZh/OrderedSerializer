@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace OrderedSerializer
 {
@@ -9,14 +10,37 @@ namespace OrderedSerializer
 
         private readonly Dictionary<Type, short> _typeMap = new Dictionary<Type, short>();
 
-        public byte Version => throw new InvalidOperationException();
+        private readonly Stack<byte> _versionStack = new Stack<byte>();
+        private byte _version;
 
+        private readonly ISerializerExtensionsFactory _factory;
 
-        public HierarchicalSerializer(IWriter writer, ITypeSerializer typeSerializer, byte defaultVersion = 0)
+        public byte Version => _version;
+
+        private readonly byte _defaultVersion;
+        public HierarchicalSerializer(IWriter writer, ITypeSerializer typeSerializer, ISerializerExtensionsFactory factory = null, byte defaultVersion = 0)
             : base(writer)
         {
+            factory ??= SerializerExtensionsFactory.Instance;
+            factory.OnError += (type, exception) =>
+            {
+                // TODO
+                //OnException?.Invoke(exception);
+            };
+            _factory = factory;
+
             _typeSerializer = typeSerializer;
-            _writer.WriteByte(defaultVersion);
+            _defaultVersion = defaultVersion;
+            Reset();
+        }
+        
+        public void Reset()
+        {
+            _writer.Reset();
+            _writer.WriteByte(_defaultVersion);
+            _version = _defaultVersion;
+            _typeMap.Clear();
+            _versionStack.Clear();
         }
 
         public void AddStruct<T>(ref T value)
@@ -28,8 +52,13 @@ namespace OrderedSerializer
         public void AddVersionedStruct<T>(ref T value)
             where T : struct, IDataStruct, IVersionedData
         {
-            _writer.WriteByte(value.Version);
+            _versionStack.Push(_version);
+            _version = value.Version;
+
+            _writer.WriteByte(_version);
             value.Serialize(this);
+
+            _version = _versionStack.Pop();
         }
 
         public void AddClass<T>(ref T value)
@@ -50,6 +79,18 @@ namespace OrderedSerializer
                         typeId += 1;
                     }
 
+                    if (null == type.GetConstructor(
+                        BindingFlags.CreateInstance |
+                        BindingFlags.Instance |
+                        BindingFlags.Public |
+                        BindingFlags.NonPublic,
+                        null,
+                        new Type[0],
+                        null))
+                    {
+                        throw new InvalidOperationException("Type '" + type + "' must have default constructor (public or non-public)");
+                    }
+
                     _typeMap.Add(type, typeId);
                     _writer.WriteShort(typeId);
                     _typeSerializer.Serialize(_writer, type);
@@ -65,13 +106,30 @@ namespace OrderedSerializer
             }
         }
 
+        public void AddAny<T>(ref T value)
+        {
+            var extension = _factory.Construct<T>();
+            if (extension == null)
+                throw new InvalidOperationException($"{typeof(T)} must be recognizable by extensions factory");
+            extension.Add(this, ref value);
+        }
+
         protected virtual void SerializeClass(IDataStruct value)
         {
             if (value is IVersionedData versionedData)
             {
-                _writer.WriteByte(versionedData.Version);
+                _versionStack.Push(_version);
+                _version = versionedData.Version;
+
+                _writer.WriteByte(_version);
+                value.Serialize(this);
+
+                _version = _versionStack.Pop();
             }
-            value.Serialize(this);
+            else
+            {
+                value.Serialize(this);
+            }
         }
     }
 }

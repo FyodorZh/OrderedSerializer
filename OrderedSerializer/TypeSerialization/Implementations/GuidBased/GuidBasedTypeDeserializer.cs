@@ -7,16 +7,30 @@ namespace OrderedSerializer.TypeSerializers
 {
     public class GuidBasedTypeDeserializer : ITypeDeserializer
     {
+        private static readonly Type _dataStructType = typeof(IDataStruct);
+
         private readonly Dictionary<string, Type> _types = new Dictionary<string, Type>();
+
+        public GuidBasedTypeDeserializer()
+        {
+        }
 
         public GuidBasedTypeDeserializer(IEnumerable<Assembly> assemblies)
         {
             foreach (var assembly in assemblies)
             {
-                foreach (var type in assembly.GetTypes())
+                RegisterAssembly(assembly);
+            }
+        }
+
+        public void RegisterAssembly(Assembly assembly)
+        {
+            foreach (var type in assembly.GetTypes())
+            {
+                if (type.IsClass && _dataStructType.IsAssignableFrom(type))
                 {
                     var attribute = (GuidAttribute)Attribute.GetCustomAttribute(type, typeof(GuidAttribute), false);
-                    if (attribute != null)
+                    if (attribute != null && Guid.TryParse(attribute.Value, out _))
                     {
                         _types.Add(attribute.Value, type);
                     }
@@ -24,8 +38,25 @@ namespace OrderedSerializer.TypeSerializers
             }
         }
 
+        public void RegisterType(Type type)
+        {
+            if (!type.IsClass || !_dataStructType.IsAssignableFrom(type))
+            {
+                throw new InvalidOperationException($"{type} must be a class that is inherited from IDataStruct");
+            }
+
+            var attribute = (GuidAttribute)Attribute.GetCustomAttribute(type, typeof(GuidAttribute), false);
+            if (attribute == null || !Guid.TryParse(attribute.Value, out _))
+            {
+                throw new InvalidOperationException($"{type} must have valid GUID");
+            }
+
+            _types.Add(attribute.Value, type);
+        }
+
         public Type Deserialize(IReader reader)
         {
+            byte version = reader.ReadByte();
             string guid = reader.ReadString();
 
             if (_types.TryGetValue(guid, out var type))

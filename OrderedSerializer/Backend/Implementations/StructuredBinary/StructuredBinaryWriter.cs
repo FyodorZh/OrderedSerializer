@@ -14,6 +14,7 @@ namespace OrderedSerializer.StructuredBinaryBackend
             {
                 throw new InvalidOperationException();
             }
+
             writer.WriteInt(_section.Count);
             foreach (var record in _section)
             {
@@ -21,17 +22,25 @@ namespace OrderedSerializer.StructuredBinaryBackend
             }
         }
 
-        public StructuredBinaryReader ConstructReader()
+        public StructuredData ExtractData()
+        {
+            var data = ShowData();
+            _section = new List<Record>();
+            return data;
+        }
+
+        public StructuredData ShowData()
         {
             if (_stack.Count != 0)
             {
                 throw new InvalidOperationException();
             }
 
-            return new StructuredBinaryReader(new List<Record>(_section));
+            StructuredData sd = new StructuredData(new Record(_section));
+            return sd;
         }
 
-        public void Clear()
+        public void Reset()
         {
             _section.Clear();
             _stack.Clear();
@@ -71,6 +80,16 @@ namespace OrderedSerializer.StructuredBinaryBackend
         }
 
         public void WriteLong(long value)
+        {
+            _section.Add(new Record(value));
+        }
+
+        public void WriteFloat(float value)
+        {
+            _section.Add(new Record(value));
+        }
+
+        public void WriteDouble(double value)
         {
             _section.Add(new Record(value));
         }

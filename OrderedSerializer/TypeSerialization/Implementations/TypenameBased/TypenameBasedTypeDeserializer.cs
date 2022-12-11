@@ -7,7 +7,8 @@ namespace OrderedSerializer.TypeSerializers
         public Type Deserialize(IReader reader)
         {
             string typeName = reader.ReadString();
-            return Type.GetType(typeName);
+            var type = Type.GetType(typeName);
+            return type;
         }
     }
 }

@@ -11,9 +11,15 @@ namespace OrderedSerializer.StructuredBinaryBackend
 
         private int _position;
 
-        public StructuredBinaryReader(List<Record> data)
+        public StructuredBinaryReader(StructuredData data)
         {
-            _section = data;
+            _section = data.Data.Section;
+        }
+
+        public void Reset()
+        {
+            _position = 0;
+            _positions.Clear();
         }
 
         private void CheckType(Record r, RecordType type)
@@ -48,47 +54,49 @@ namespace OrderedSerializer.StructuredBinaryBackend
         {
             Record r = _section[_position++];
             CheckType(r, RecordType.Byte);
-            checked
-            {
-                return (byte)r.Value;
-            }
+            return r.Value.ByteValue;
         }
 
         public char ReadChar()
         {
             Record r = _section[_position++];
             CheckType(r, RecordType.Char);
-            checked
-            {
-                return (char)r.Value;
-            }
+            return r.Value.CharValue;
         }
 
         public short ReadShort()
         {
             Record r = _section[_position++];
             CheckType(r, RecordType.Short);
-            checked
-            {
-                return (short)r.Value;
-            }
+            return r.Value.ShortValue;
         }
 
         public int ReadInt()
         {
             Record r = _section[_position++];
             CheckType(r, RecordType.Int);
-            checked
-            {
-                return (int)r.Value;
-            }
+            return r.Value.IntValue;
         }
 
         public long ReadLong()
         {
             Record r = _section[_position++];
             CheckType(r, RecordType.Long);
-            return r.Value;
+            return r.Value.LongValue;
+        }
+
+        public float ReadFloat()
+        {
+            Record r = _section[_position++];
+            CheckType(r, RecordType.Float);
+            return r.Value.FloatValue;
+        }
+
+        public double ReadDouble()
+        {
+            Record r = _section[_position++];
+            CheckType(r, RecordType.Double);
+            return r.Value.DoubleValue;
         }
 
         public string ReadString()
