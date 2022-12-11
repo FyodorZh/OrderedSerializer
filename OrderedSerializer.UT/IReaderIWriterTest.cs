@@ -26,7 +26,7 @@ namespace OrderedSerializer
             Check(GetList(), () => new StructuredBinaryWriter(), w =>
             {
                 StructuredBinaryWriter bw = (StructuredBinaryWriter)w;
-                return bw.ConstructReader();
+                return new StructuredBinaryReader(bw.ExtractData());
             });
         }
 
