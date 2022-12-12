@@ -30,7 +30,7 @@ namespace OrderedSerializer.BinaryBackend
             }
         }
 
-        public void Reset()
+        public void Clear()
         {
             _size = 0;
             _sectionsStack.Clear();
@@ -65,6 +65,12 @@ namespace OrderedSerializer.BinaryBackend
             _buffer[pos++] = block.Byte3;
         }
 
+        public void WriteBool(bool value)
+        {
+            Grow(1);
+            _buffer[_size++] = value ? (byte)1 : (byte)0;
+        }
+        
         public void WriteByte(byte value)
         {
             Grow(1);

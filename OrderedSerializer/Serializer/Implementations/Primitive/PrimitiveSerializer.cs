@@ -17,7 +17,7 @@ namespace OrderedSerializer
 
         public void Add(ref bool value)
         {
-            _writer.WriteByte((byte)(value ? 1 : 0));
+            _writer.WriteBool(value);
         }
 
         public void Add(ref byte value)

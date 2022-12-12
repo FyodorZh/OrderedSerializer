@@ -2,6 +2,7 @@
 {
     public interface ILowLevelWriter
     {
+        void WriteBool(bool value);
         void WriteByte(byte value);
         void WriteChar(char value);
         void WriteShort(short value);
@@ -14,7 +15,6 @@
 
     public interface IWriter : ILowLevelWriter
     {
-        void Reset();
         void BeginSection();
         void EndSection();
     }

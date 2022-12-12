@@ -1,11 +1,13 @@
 using System;
-using OrderedSerializer.BinaryBackend;
 using OrderedSerializer.TypeSerializers;
 
 namespace OrderedSerializer
 {
-    internal class CopyViaSerialization
+    internal static class CopyViaSerialization
     {
+        [ThreadStatic] 
+        private static InMemoryReaderWriter _backend;
+        
         [ThreadStatic]
         private static HierarchicalSerializer _serializer;
         
@@ -14,37 +16,58 @@ namespace OrderedSerializer
 
         static void CheckSerializer()
         {
-            if (_serializer == null)
+            if (_backend == null)
             {
-                var _writer = new BinaryWriter();
-                var _reader = new BinaryReaderBasedOnWriter(_writer);
-                _serializer = new HierarchicalSerializer(_writer, new TypenameBasedTypeSerializer());
-                _deserializer = new HierarchicalDeserializer(_reader, new TypenameBasedTypeDeserializer());
+                _backend = new InMemoryReaderWriter();
+                _serializer = new HierarchicalSerializer(_backend, new TypenameBasedTypeSerializer());
+                _deserializer = new HierarchicalDeserializer(_backend, new TypenameBasedTypeDeserializer());
             }
-
         }
 
         public static T CopyClass<T>(T source) where T : class, IDataStruct
         {
             CheckSerializer();
 
-            _serializer.Reset();
-            _serializer.AddClass(ref source); 
-            _deserializer.Reset();
-            T copy = default(T);
-            _deserializer.AddClass(ref copy);
-            return copy;
+            try
+            {
+                _serializer.Prepare();
+                _serializer.AddClass(ref source);
+                T copy = default(T);
+                _deserializer.Prepare();
+                _deserializer.AddClass(ref copy);
+                if (!_backend.IsEmpty)
+                {
+                    throw new InvalidOperationException();
+                }
+                return copy;
+            }
+            finally
+            {
+                _backend.Clear();   
+            }
         }
 
         public static T CopyStruct<T>(T source) where T : struct, IDataStruct
         {
             CheckSerializer();
-            _serializer.Reset();
-            _serializer.AddStruct(ref source);
-            _deserializer.Reset();
-            T copy = default(T);
-            _deserializer.AddStruct(ref copy);
-            return copy;
+            
+            try
+            {
+                _serializer.Prepare();
+                _serializer.AddStruct(ref source);
+                T copy = default(T);
+                _deserializer.Prepare();
+                _deserializer.AddStruct(ref copy);
+                if (!_backend.IsEmpty)
+                {
+                    throw new InvalidOperationException();
+                }
+                return copy;
+            }
+            finally
+            {
+                _backend.Clear();   
+            }
         }
     }
 

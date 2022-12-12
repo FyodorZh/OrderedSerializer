@@ -17,8 +17,7 @@ namespace OrderedSerializer
 
         public byte Version => _version;
 
-        private readonly byte _defaultVersion;
-        public HierarchicalSerializer(IWriter writer, ITypeSerializer typeSerializer, ISerializerExtensionsFactory factory = null, byte defaultVersion = 0)
+        public HierarchicalSerializer(IWriter writer, ITypeSerializer typeSerializer, ISerializerExtensionsFactory factory = null)
             : base(writer)
         {
             factory ??= SerializerExtensionsFactory.Instance;
@@ -30,15 +29,14 @@ namespace OrderedSerializer
             _factory = factory;
 
             _typeSerializer = typeSerializer;
-            _defaultVersion = defaultVersion;
-            Reset();
+            Prepare();
         }
         
-        public void Reset()
+        public void Prepare()
         {
-            _writer.Reset();
-            _writer.WriteByte(_defaultVersion);
-            _version = _defaultVersion;
+            _writer.WriteByte(1); // Protocol type Id == 1
+            _writer.WriteByte(0); // Protocol internal version
+            _version = 0;
             _typeMap.Clear();
             _versionStack.Clear();
         }

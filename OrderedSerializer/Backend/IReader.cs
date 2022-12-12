@@ -2,6 +2,7 @@
 {
     public interface ILowLevelReader
     {
+        bool ReadBool();
         byte ReadByte();
         char ReadChar();
         short ReadShort();
@@ -14,7 +15,6 @@
 
     public interface IReader : ILowLevelReader
     {
-        void Reset();
         void BeginSection();
         bool EndSection();
     }

@@ -40,7 +40,7 @@ namespace OrderedSerializer.StructuredBinaryBackend
             return sd;
         }
 
-        public void Reset()
+        public void Clear()
         {
             _section.Clear();
             _stack.Clear();
@@ -59,6 +59,11 @@ namespace OrderedSerializer.StructuredBinaryBackend
             _section.Add(r);
         }
 
+        public void WriteBool(bool value)
+        {
+            WriteByte(value ? (byte)1 : (byte)0);
+        }
+        
         public void WriteByte(byte value)
         {
             _section.Add(new Record(value));

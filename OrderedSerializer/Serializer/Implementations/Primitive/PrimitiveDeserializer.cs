@@ -17,17 +17,7 @@ namespace OrderedSerializer
 
         public void Add(ref bool value)
         {
-            switch (_reader.ReadByte())
-            {
-                case 0:
-                    value = false;
-                    break;
-                case 1:
-                    value = true;
-                    break;
-                default:
-                    throw new InvalidOperationException();
-            }
+            value = _reader.ReadBool();
         }
 
         public void Add(ref byte value)

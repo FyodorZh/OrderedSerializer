@@ -61,6 +61,20 @@ namespace OrderedSerializer.BinaryBackend
             }
         }
 
+        public bool ReadBool()
+        {
+            Check(1);
+            switch (_buffer[_position++])
+            {
+                case 0:
+                    return false;
+                case 1:
+                    return true;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+        
         public byte ReadByte()
         {
             Check(1);

@@ -66,7 +66,7 @@ namespace OrderedSerializer
             StructuredBinaryReader dataReader;
             {
                 var dataWriter = new StructuredBinaryWriter();
-                var writer = new GraphSerializer(dataWriter, new TypenameBasedTypeSerializer(), null, 1);
+                var writer = new GraphSerializer(dataWriter, new TypenameBasedTypeSerializer(), null);
 
                 writer.AddClass(ref r0);
 

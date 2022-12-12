@@ -30,15 +30,25 @@ namespace OrderedSerializer
             _factory = factory;
 
             _typeDeserializer = typeDeserializer;
-            Reset();
+            Prepare();
         }
 
-        public void Reset()
+        public void Prepare()
         {
-            _reader.Reset();
+            if (_reader.ReadByte() != 1)
+                throw new InvalidOperationException();
+            switch (_reader.ReadByte())
+            {
+                case 0:
+                    // OK
+                    break;
+                default:
+                    throw new InvalidOperationException();
+            }
+            
             _versions.Clear();
             _typeMap.Clear();
-            _version = _reader.ReadByte();
+            _version = 0;
         }
         public void AddStruct<T>(ref T value)
             where T : struct, IDataStruct

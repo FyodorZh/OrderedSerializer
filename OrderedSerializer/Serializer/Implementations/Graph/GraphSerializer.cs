@@ -6,8 +6,8 @@ namespace OrderedSerializer
     {
         private readonly Dictionary<object, int> _instanceMap = new Dictionary<object, int>(new ReferenceComparer());
 
-        public GraphSerializer(IWriter writer, ITypeSerializer typeSerializer, ISerializerExtensionsFactory factory = null, byte defaultVersion = 0)
-            : base(writer, typeSerializer, factory, defaultVersion)
+        public GraphSerializer(IWriter writer, ITypeSerializer typeSerializer, ISerializerExtensionsFactory factory = null)
+            : base(writer, typeSerializer, factory)
         {
         }
 

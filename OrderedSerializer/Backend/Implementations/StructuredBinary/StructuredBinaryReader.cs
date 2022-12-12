@@ -50,6 +50,19 @@ namespace OrderedSerializer.StructuredBinaryBackend
             return isOk;
         }
 
+        public bool ReadBool()
+        {
+            switch (ReadByte())
+            {
+                case 0:
+                    return false;
+                case 1:
+                    return true;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
         public byte ReadByte()
         {
             Record r = _section[_position++];
