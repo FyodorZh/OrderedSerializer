@@ -1,0 +1,27 @@
+﻿<Project>
+
+    <PropertyGroup>
+        <BaseIntermediateOutputPath>..\..\..\obj\OrderedSerializer</BaseIntermediateOutputPath>
+        <BaseOutputPath>..\..\..\bin\OrderedSerializer</BaseOutputPath>
+        <OutDir>..\..\..\bin\OrderedSerializer</OutDir>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+    
+    <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />
+    
+    <PropertyGroup>
+        <LangVersion>9</LangVersion>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <DefaultItemExcludes>$(DefaultItemExcludes);**\*.meta;*.asmdef</DefaultItemExcludes>
+    </PropertyGroup>
+    
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+      <OutputPath>bin\Debug\</OutputPath>
+    </PropertyGroup>
+    
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+      <OutputPath>bin\Release\</OutputPath>
+    </PropertyGroup>
+
+    <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
+</Project>

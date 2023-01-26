@@ -1,0 +1,9 @@
+{
+  "name": "com.fyodorzh.ordered-serializer",
+  "version": "1.0.0",
+  "displayName": "Ordered serializer",
+  "description": "Ordered serializer",
+  "unity": "2021.3",
+  "dependencies": {},
+  "keywords": [ "serializer" ]
+}
