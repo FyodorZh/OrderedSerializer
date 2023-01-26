@@ -2,7 +2,7 @@
 
 namespace OrderedSerializer
 {
-    public class HashSetSerializerExtension<T> : ISerializerExtension<HashSet<T>>
+    public class HashSetSerializerExtension<T> : ISerializerExtension<HashSet<T>?>
     {
         private readonly ISerializerExtension<T> _elementSerializer;
 
@@ -11,7 +11,7 @@ namespace OrderedSerializer
             _elementSerializer = elementSerializer;
         }
 
-        public void Add(IOrderedSerializer serializer, ref HashSet<T> value)
+        public void Add(IOrderedSerializer serializer, ref HashSet<T>? value)
         {
             if (serializer.IsWriter)
             {
@@ -42,7 +42,7 @@ namespace OrderedSerializer
                     value = new HashSet<T>();
                     for (int i = 0; i < count; ++i)
                     {
-                        T element = default;
+                        T element = default!;
                         _elementSerializer.Add(serializer, ref element);
                         value.Add(element);
                     }

@@ -4,6 +4,6 @@ namespace OrderedSerializer
 {
     public interface ITypeDeserializer
     {
-        Type Deserialize(IReader reader);
+        Type? Deserialize(IReader reader);
     }
 }

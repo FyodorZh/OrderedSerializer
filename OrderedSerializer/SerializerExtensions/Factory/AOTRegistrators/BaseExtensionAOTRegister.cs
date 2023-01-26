@@ -6,7 +6,7 @@
 
         protected void RegisterKeyValuePair<TKey, TValue>()
         {
-            AOTGuard.Instance.RegisterType(new DictionarySerializerExtension<TKey, TValue>(null, null));
+            AOTGuard.Instance.RegisterType(new DictionarySerializerExtension<TKey, TValue>(null!, null!));
         }
 
         protected void RegisterDataStruct<T>()
@@ -19,12 +19,12 @@
         protected void RegisterStruct<T>()
             where T: struct
         {
-            AOTGuard.Instance.RegisterType(new ArraySerializerExtension<T>(null));
-            AOTGuard.Instance.RegisterType(new ListSerializerExtension<T>(null));
-            AOTGuard.Instance.RegisterType(new ListSerializerExtension<T>(null));
-            AOTGuard.Instance.RegisterType(new QueueSerializerExtension<T>(null));
-            AOTGuard.Instance.RegisterType(new StackSerializerExtension<T>(null));
-            AOTGuard.Instance.RegisterType(new HashSetSerializerExtension<T>(null));
+            AOTGuard.Instance.RegisterType(new ArraySerializerExtension<T>(null!));
+            AOTGuard.Instance.RegisterType(new ListSerializerExtension<T>(null!));
+            AOTGuard.Instance.RegisterType(new ListSerializerExtension<T>(null!));
+            AOTGuard.Instance.RegisterType(new QueueSerializerExtension<T>(null!));
+            AOTGuard.Instance.RegisterType(new StackSerializerExtension<T>(null!));
+            AOTGuard.Instance.RegisterType(new HashSetSerializerExtension<T>(null!));
         }
     }
 }

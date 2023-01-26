@@ -17,7 +17,7 @@ namespace OrderedSerializer
 
         public byte Version => _version;
 
-        public HierarchicalSerializer(IWriter writer, ITypeSerializer typeSerializer, ISerializerExtensionsFactory factory = null)
+        public HierarchicalSerializer(IWriter writer, ITypeSerializer typeSerializer, ISerializerExtensionsFactory? factory = null)
             : base(writer)
         {
             factory ??= SerializerExtensionsFactory.Instance;
@@ -59,7 +59,7 @@ namespace OrderedSerializer
             _version = _versionStack.Pop();
         }
 
-        public void AddClass<T>(ref T value)
+        public void AddClass<T>(ref T? value)
             where T : class, IDataStruct
         {
             if (value == null)

@@ -25,7 +25,7 @@
         IPrimitiveSerializer<ulong>,
         IPrimitiveSerializer<float>,
         IPrimitiveSerializer<double>,
-        IPrimitiveSerializer<string>
+        IPrimitiveSerializer<string?>
     {
     }
 
@@ -39,7 +39,7 @@
         /// <summary>
         /// Serialize both versioned and unversioned data
         /// </summary>
-        void AddClass<T>(ref T value) where T : class, IDataStruct;
+        void AddClass<T>(ref T? value) where T : class, IDataStruct;
 
         void AddAny<T>(ref T value);
     }

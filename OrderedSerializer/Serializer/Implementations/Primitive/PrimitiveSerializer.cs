@@ -78,7 +78,7 @@ namespace OrderedSerializer
             _writer.WriteDouble(value);
         }
 
-        public void Add(ref string value)
+        public void Add(ref string? value)
         {
             _writer.WriteString(value);
         }

@@ -10,7 +10,7 @@
         void WriteLong(long value);
         void WriteFloat(float value);
         void WriteDouble(double value);
-        void WriteString(string value);
+        void WriteString(string? value);
     }
 
     public interface IWriter : ILowLevelWriter

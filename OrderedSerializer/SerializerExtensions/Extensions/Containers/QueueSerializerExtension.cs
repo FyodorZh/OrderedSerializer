@@ -2,7 +2,7 @@
 
 namespace OrderedSerializer
 {
-    public class QueueSerializerExtension<T> : ISerializerExtension<Queue<T>>
+    public class QueueSerializerExtension<T> : ISerializerExtension<Queue<T>?>
     {
         private readonly ISerializerExtension<T> _elementSerializer;
 
@@ -11,7 +11,7 @@ namespace OrderedSerializer
             _elementSerializer = elementSerializer;
         }
 
-        public void Add(IOrderedSerializer serializer, ref Queue<T> value)
+        public void Add(IOrderedSerializer serializer, ref Queue<T>? value)
         {
             if (serializer.IsWriter)
             {
@@ -42,7 +42,7 @@ namespace OrderedSerializer
                     value = new Queue<T>(count);
                     for (int i = 0; i < count; ++i)
                     {
-                        T element = default;
+                        T element = default!;
                         _elementSerializer.Add(serializer, ref element);
                         value.Enqueue(element);
                     }

@@ -17,8 +17,8 @@ namespace OrderedSerializer
     class CA : IDataStruct, IVersionedData
     {
         public int y;
-        public string hello;
-        public CA self;
+        public string? hello;
+        public CA? self;
 
         public void Serialize(IOrderedSerializer serializer)
         {
@@ -36,7 +36,7 @@ namespace OrderedSerializer
 
     class Root : IDataStruct
     {
-        public CA a;
+        public CA? a;
         public SA sa;
 
         public void Serialize(IOrderedSerializer serializer)
@@ -68,7 +68,7 @@ namespace OrderedSerializer
                 var dataWriter = new StructuredBinaryWriter();
                 var writer = new GraphSerializer(dataWriter, new TypenameBasedTypeSerializer(), null);
 
-                writer.AddClass(ref r0);
+                writer.AddClass(ref r0!);
 
                 dataReader = new StructuredBinaryReader(dataWriter.ExtractData());
             }
@@ -81,7 +81,7 @@ namespace OrderedSerializer
                     Assert.Fail(ex.ToString());
                 };
 
-                Root r1 = null;
+                Root? r1 = null;
                 reader.AddClass(ref r1);
             }
 

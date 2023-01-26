@@ -33,7 +33,7 @@ namespace OrderedSerializer
         private readonly ConcurrentDictionary<Type, bool> _unknownTypes = new ConcurrentDictionary<Type, bool>();
 
 
-        public event Action<Type> OnFail;
+        public event Action<Type>? OnFail;
 
         public bool IsActive { get; set; } = false;
 
@@ -43,7 +43,7 @@ namespace OrderedSerializer
 
         public void RegisterType<T>(T value)
         {
-            Type type = value.GetType();
+            Type type = value!.GetType();
             _registeredTypes.Add(type);
             if (IsActive)
             {

@@ -10,7 +10,7 @@
         long ReadLong();
         float ReadFloat();
         double ReadDouble();
-        string ReadString();
+        string? ReadString();
     }
 
     public interface IReader : ILowLevelReader

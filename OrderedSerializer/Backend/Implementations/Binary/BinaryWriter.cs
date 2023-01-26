@@ -141,7 +141,7 @@ namespace OrderedSerializer.BinaryBackend
             _buffer[_size++] = block.Byte7;
         }
 
-        public void WriteString(string value)
+        public void WriteString(string? value)
         {
             Grow(4);
             if (value == null)

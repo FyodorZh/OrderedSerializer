@@ -8,18 +8,18 @@ namespace OrderedSerializer
     {
         private readonly ITypeDeserializer _typeDeserializer;
 
-        private readonly List<IConstructor> _typeMap = new List<IConstructor>();
+        private readonly List<IConstructor?> _typeMap = new List<IConstructor?>();
 
         private readonly Stack<byte> _versions = new Stack<byte>();
         private byte _version;
 
-        public event Action<Exception> OnException;
+        public event Action<Exception>? OnException;
 
         private readonly ISerializerExtensionsFactory _factory;
 
         public byte Version => _version;
         
-        public HierarchicalDeserializer(IReader reader, ITypeDeserializer typeDeserializer, ISerializerExtensionsFactory factory = null)
+        public HierarchicalDeserializer(IReader reader, ITypeDeserializer typeDeserializer, ISerializerExtensionsFactory? factory = null)
             : base(reader)
         {
             factory ??= SerializerExtensionsFactory.Instance;
@@ -66,7 +66,7 @@ namespace OrderedSerializer
             _version = _versions.Pop();
         }
 
-        public void AddClass<T>(ref T value)
+        public void AddClass<T>(ref T? value)
             where T : class, IDataStruct
         {
             int flag = _reader.ReadShort();
@@ -84,7 +84,7 @@ namespace OrderedSerializer
                     _typeMap.Add(null);
                 }
 
-                IConstructor ctor = _typeMap[typeId];
+                IConstructor? ctor = _typeMap[typeId];
                 if (ctor == null)
                 {
                     var type = _typeDeserializer.Deserialize(_reader);
@@ -116,7 +116,7 @@ namespace OrderedSerializer
             extension.Add(this, ref value);
         }
 
-        protected virtual T DeserializeClass<T>(IConstructor ctor)
+        protected virtual T? DeserializeClass<T>(IConstructor ctor)
             where T : class, IDataStruct
         {
             var value = ctor.Construct() as T;
@@ -157,7 +157,7 @@ namespace OrderedSerializer
         protected interface IConstructor
         {
             bool IsValid { get; }
-            object Construct();
+            object? Construct();
         }
 
         private class NullConstructor : IConstructor
@@ -166,7 +166,7 @@ namespace OrderedSerializer
 
             public bool IsValid => false;
 
-            public object Construct()
+            public object? Construct()
             {
                 return null;
             }
@@ -174,9 +174,9 @@ namespace OrderedSerializer
 
         private class ReflectionBasedConstructor : IConstructor
         {
-            private static readonly object[] VoidObjectList = new object[0];
+            private static readonly object[] VoidObjectList = Array.Empty<object>();
 
-            private readonly ConstructorInfo _ctorInfo;
+            private readonly ConstructorInfo? _ctorInfo;
 
             public bool IsValid => _ctorInfo != null;
 
@@ -186,10 +186,10 @@ namespace OrderedSerializer
                                                 BindingFlags.Instance |
                                                 BindingFlags.Public |
                                                 BindingFlags.NonPublic,
-                    null, new Type[0], null);
+                    null, Type.EmptyTypes, null);
             }
 
-            public object Construct()
+            public object? Construct()
             {
                 return _ctorInfo?.Invoke(VoidObjectList);
             }

@@ -6,18 +6,19 @@ namespace OrderedSerializer
     {
         private struct InstanceInfo
         {
-            public object Instance;
+            public object? Instance;
             public bool IsInitialized;
         }
 
         private readonly List<InstanceInfo> _instances = new List<InstanceInfo>();
 
-        public GraphDeserializer(IReader reader, ITypeDeserializer typeDeserializer, ISerializerExtensionsFactory factory = null)
+        public GraphDeserializer(IReader reader, ITypeDeserializer typeDeserializer, ISerializerExtensionsFactory? factory = null)
             : base(reader, typeDeserializer, factory)
         {
         }
 
-        protected override T DeserializeClass<T>(IConstructor ctor)
+        protected override T? DeserializeClass<T>(IConstructor ctor)
+            where T : class
         {
             int instanceId = _reader.ReadInt();
             while (instanceId >= _instances.Count)
@@ -28,7 +29,7 @@ namespace OrderedSerializer
             InstanceInfo instanceInfo = _instances[instanceId];
             if (instanceInfo.IsInitialized)
             {
-                return (T)instanceInfo.Instance;
+                return instanceInfo.Instance as T;
             }
             else
             {

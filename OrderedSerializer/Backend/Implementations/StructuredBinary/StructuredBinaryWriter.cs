@@ -99,7 +99,7 @@ namespace OrderedSerializer.StructuredBinaryBackend
             _section.Add(new Record(value));
         }
 
-        public void WriteString(string value)
+        public void WriteString(string? value)
         {
             _section.Add(new Record(value));
         }

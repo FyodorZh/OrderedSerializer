@@ -54,12 +54,12 @@ namespace OrderedSerializer.TypeSerializers
             _types.Add(attribute.Value, type);
         }
 
-        public Type Deserialize(IReader reader)
+        public Type? Deserialize(IReader reader)
         {
             byte version = reader.ReadByte();
-            string guid = reader.ReadString();
+            string? guid = reader.ReadString();
 
-            if (_types.TryGetValue(guid, out var type))
+            if (guid != null && _types.TryGetValue(guid, out var type))
             {
                 return type;
             }

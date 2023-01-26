@@ -12,7 +12,7 @@ namespace OrderedSerializer
         private readonly Queue<long> _longs = new Queue<long>();
         private readonly Queue<float> _floats = new Queue<float>();
         private readonly Queue<double> _doubles = new Queue<double>();
-        private readonly Queue<string> _strings = new Queue<string>();
+        private readonly Queue<string?> _strings = new Queue<string?>();
 
         public bool IsEmpty =>
             _bools.Count == 0 &&
@@ -78,7 +78,7 @@ namespace OrderedSerializer
             return _doubles.Dequeue();
         }
 
-        public string ReadString()
+        public string? ReadString()
         {
             return _strings.Dequeue();
         }
@@ -143,7 +143,7 @@ namespace OrderedSerializer
             _doubles.Enqueue(value);
         }
 
-        public void WriteString(string value)
+        public void WriteString(string? value)
         {
             _strings.Enqueue(value);
         }

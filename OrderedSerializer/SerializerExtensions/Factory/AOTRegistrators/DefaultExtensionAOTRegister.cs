@@ -27,18 +27,18 @@ namespace OrderedSerializer
 
         private void RegisterTypeInContainers<T>()
         {
-            AOTGuard.Instance.RegisterType(new ArraySerializerExtension<T>(null));
-            AOTGuard.Instance.RegisterType(new ListSerializerExtension<T>(null));
-            AOTGuard.Instance.RegisterType(new ListSerializerExtension<T>(null));
-            AOTGuard.Instance.RegisterType(new QueueSerializerExtension<T>(null));
-            AOTGuard.Instance.RegisterType(new StackSerializerExtension<T>(null));
-            AOTGuard.Instance.RegisterType(new HashSetSerializerExtension<T>(null));
+            AOTGuard.Instance.RegisterType(new ArraySerializerExtension<T>(null!));
+            AOTGuard.Instance.RegisterType(new ListSerializerExtension<T>(null!));
+            AOTGuard.Instance.RegisterType(new ListSerializerExtension<T>(null!));
+            AOTGuard.Instance.RegisterType(new QueueSerializerExtension<T>(null!));
+            AOTGuard.Instance.RegisterType(new StackSerializerExtension<T>(null!));
+            AOTGuard.Instance.RegisterType(new HashSetSerializerExtension<T>(null!));
         }
 
         private void F<T1, T2>()
         {
-            AOTGuard.Instance.RegisterType(new DictionarySerializerExtension<T1, T2>(null, null));
-            AOTGuard.Instance.RegisterType(new DictionarySerializerExtension<T2, T1>(null, null));
+            AOTGuard.Instance.RegisterType(new DictionarySerializerExtension<T1, T2>(null!, null!));
+            AOTGuard.Instance.RegisterType(new DictionarySerializerExtension<T2, T1>(null!, null!));
         }
 
         private void F<TKey, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>()

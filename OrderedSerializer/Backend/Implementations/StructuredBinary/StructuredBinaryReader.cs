@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace OrderedSerializer.StructuredBinaryBackend
 {
@@ -13,7 +14,7 @@ namespace OrderedSerializer.StructuredBinaryBackend
 
         public StructuredBinaryReader(StructuredData data)
         {
-            _section = data.Data.Section;
+            _section = data.Data.Section ?? throw new ArgumentNullException(nameof(data.Data.Section));
         }
 
         public void Reset()
@@ -38,7 +39,7 @@ namespace OrderedSerializer.StructuredBinaryBackend
             _sections.Push(_section);
             _positions.Push(_position + 1);
 
-            _section = r.Section;
+            _section = r.Section!;
             _position = 0;
         }
 
@@ -112,7 +113,7 @@ namespace OrderedSerializer.StructuredBinaryBackend
             return r.Value.DoubleValue;
         }
 
-        public string ReadString()
+        public string? ReadString()
         {
             Record r = _section[_position++];
             CheckType(r, RecordType.String);

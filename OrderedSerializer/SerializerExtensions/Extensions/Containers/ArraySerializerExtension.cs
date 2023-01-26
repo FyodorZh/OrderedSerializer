@@ -1,6 +1,6 @@
 ﻿namespace OrderedSerializer
 {
-    public class ArraySerializerExtension<T> : ISerializerExtension<T[]>
+    public class ArraySerializerExtension<T> : ISerializerExtension<T[]?>
     {
         private readonly ISerializerExtension<T> _elementSerializer;
 
@@ -9,7 +9,7 @@
             _elementSerializer = elementSerializer;
         }
 
-        public void Add(IOrderedSerializer serializer, ref T[] value)
+        public void Add(IOrderedSerializer serializer, ref T[]? value)
         {
             if (serializer.IsWriter)
             {

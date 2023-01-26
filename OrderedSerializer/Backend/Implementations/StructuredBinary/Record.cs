@@ -21,8 +21,8 @@ namespace OrderedSerializer.StructuredBinaryBackend
     {
         public readonly RecordType Type;
         public readonly TypeAlias Value;
-        public readonly string Text;
-        public readonly List<Record> Section;
+        public readonly string? Text;
+        public readonly List<Record>? Section;
 
         public Record(byte value)
         {
@@ -80,7 +80,7 @@ namespace OrderedSerializer.StructuredBinaryBackend
             Section = null;
         }
 
-        public Record(string value)
+        public Record(string? value)
         {
             Type = RecordType.String;
             Value = 0;
@@ -98,13 +98,18 @@ namespace OrderedSerializer.StructuredBinaryBackend
 
         public Record Clone()
         {
-            List<Record> list = new List<Record>(Section.Count);
-            foreach (var record in Section)
+            if (Section != null)
             {
-                list.Add(record.Clone());
+                List<Record> list = new List<Record>(Section.Count);
+                foreach (var record in Section)
+                {
+                    list.Add(record.Clone());
+                }
+
+                return new Record(list);
             }
 
-            return new Record(list);
+            return this;
         }
 
         public void WriteTo(IWriter writer)
@@ -134,11 +139,11 @@ namespace OrderedSerializer.StructuredBinaryBackend
                     writer.WriteDouble(Value.DoubleValue);
                     break;
                 case RecordType.String:
-                    writer.WriteString(Text);
+                    writer.WriteString(Text!);
                     break;
                 case RecordType.Section:
                 {
-                    writer.WriteInt(Section.Count);
+                    writer.WriteInt(Section!.Count);
                     foreach (var element in Section)
                     {
                         element.WriteTo(writer);
@@ -205,7 +210,7 @@ namespace OrderedSerializer.StructuredBinaryBackend
                 case RecordType.String:
                     return "text:" + Text;
                 case RecordType.Section:
-                    return "Section[" + Section.Count + "]";
+                    return "Section[" + Section!.Count + "]";
                 default:
                     return "INVALID_TYPE_" + Type;
             }

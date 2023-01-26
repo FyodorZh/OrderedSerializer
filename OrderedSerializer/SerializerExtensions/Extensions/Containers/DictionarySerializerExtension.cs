@@ -2,7 +2,7 @@
 
 namespace OrderedSerializer
 {
-    public class DictionarySerializerExtension<TKey, TValue> : ISerializerExtension<Dictionary<TKey, TValue>>
+    public class DictionarySerializerExtension<TKey, TValue> : ISerializerExtension<Dictionary<TKey, TValue>?>
     {
         private readonly ISerializerExtension<TKey> _keySerializer;
         private readonly ISerializerExtension<TValue> _valueSerializer;
@@ -13,7 +13,7 @@ namespace OrderedSerializer
             _valueSerializer = valueSerializer;
         }
 
-        public void Add(IOrderedSerializer serializer, ref Dictionary<TKey, TValue> value)
+        public void Add(IOrderedSerializer serializer, ref Dictionary<TKey, TValue>? value)
         {
             if (serializer.IsWriter)
             {
@@ -46,8 +46,8 @@ namespace OrderedSerializer
                     value = new Dictionary<TKey, TValue>(count);
                     for (int i = 0; i < count; ++i)
                     {
-                        TKey k = default;
-                        TValue v = default;
+                        TKey k = default!;
+                        TValue v = default!;
                         _keySerializer.Add(serializer, ref k);
                         _valueSerializer.Add(serializer, ref v);
 

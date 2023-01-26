@@ -169,7 +169,7 @@ namespace OrderedSerializer.BinaryBackend
             return block.Value;
         }
 
-        public string ReadString()
+        public string? ReadString()
         {
             int count = ReadInt();
             if (count == 0)

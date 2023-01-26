@@ -2,7 +2,7 @@
 {
     public class StructuredData
     {
-        private Record _root;
+        private readonly Record _root;
 
         public Record Data => _root;
 

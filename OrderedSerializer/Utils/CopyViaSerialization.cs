@@ -6,25 +6,28 @@ namespace OrderedSerializer
     internal static class CopyViaSerialization
     {
         [ThreadStatic] 
-        private static InMemoryReaderWriter _backend;
+        private static bool _initialized;
+        [ThreadStatic] 
+        private static InMemoryReaderWriter _backend = null!;
         
         [ThreadStatic]
-        private static HierarchicalSerializer _serializer;
+        private static HierarchicalSerializer _serializer = null!;
         
         [ThreadStatic]
-        private static HierarchicalDeserializer _deserializer;
+        private static HierarchicalDeserializer _deserializer = null!;
 
         static void CheckSerializer()
         {
-            if (_backend == null)
+            if (!_initialized)
             {
+                _initialized = true;
                 _backend = new InMemoryReaderWriter();
                 _serializer = new HierarchicalSerializer(_backend, new TypenameBasedTypeSerializer());
                 _deserializer = new HierarchicalDeserializer(_backend, new TypenameBasedTypeDeserializer());
             }
         }
 
-        public static T CopyClass<T>(T source) where T : class, IDataStruct
+        public static T? CopyClass<T>(T? source) where T : class, IDataStruct
         {
             CheckSerializer();
 
@@ -32,7 +35,7 @@ namespace OrderedSerializer
             {
                 _serializer.Prepare();
                 _serializer.AddClass(ref source);
-                T copy = default(T);
+                T? copy = default(T);
                 _deserializer.Prepare();
                 _deserializer.AddClass(ref copy);
                 if (!_backend.IsEmpty)
@@ -74,7 +77,7 @@ namespace OrderedSerializer
 
     public static class CopyViaSerialization_ClassExt
     {
-        public static T Copy<T>(this T source) where T : class, IDataStruct
+        public static T? Copy<T>(this T? source) where T : class, IDataStruct
         {
             return CopyViaSerialization.CopyClass(source);
         }

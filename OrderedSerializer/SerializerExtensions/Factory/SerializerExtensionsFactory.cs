@@ -12,13 +12,13 @@ namespace OrderedSerializer
         private static readonly object _lock = new object();
 
         private readonly SerializerExtensionsFactoryMode _aotMode;
-        private readonly IAOTGuardChecker _aotGuard;
+        private readonly IAOTGuardChecker? _aotGuard;
 
-        private readonly Dictionary<Type, ISerializerExtension> _extensions = new Dictionary<Type, ISerializerExtension>();
-        private readonly Dictionary<Type, Func<Type, ISerializerExtension>> _ctors1 = new Dictionary<Type, Func<Type, ISerializerExtension>>();
-        private readonly Dictionary<Type, Func<Type, Type, ISerializerExtension>> _ctors2 = new Dictionary<Type, Func<Type, Type, ISerializerExtension>>();
+        private readonly Dictionary<Type, ISerializerExtension?> _extensions = new Dictionary<Type, ISerializerExtension?>();
+        private readonly Dictionary<Type, Func<Type, ISerializerExtension?>> _ctors1 = new Dictionary<Type, Func<Type, ISerializerExtension?>>();
+        private readonly Dictionary<Type, Func<Type, Type, ISerializerExtension?>> _ctors2 = new Dictionary<Type, Func<Type, Type, ISerializerExtension?>>();
 
-        public event Action<Type, Exception> OnError;
+        public event Action<Type, Exception>? OnError;
 
         static SerializerExtensionsFactory()
         {
@@ -60,7 +60,7 @@ namespace OrderedSerializer
             Register0(new DateTimeSerializerExtension());
 
             AOTGuard.Instance.RegisterType(new DataClassSerializerExtension<IDataStruct>());
-            AOTGuard.Instance.RegisterType(new ArraySerializerExtension<Object>(null));
+            AOTGuard.Instance.RegisterType(new ArraySerializerExtension<Object>(null!));
 
             if (_aotMode != SerializerExtensionsFactoryMode.AOTSafeMode)
             {
@@ -111,7 +111,7 @@ namespace OrderedSerializer
 
             ISerializerExtension CtorMethod(Type paramType)
             {
-                ISerializerExtension nestedExtension = ((ISerializerExtensionsFactory)this).Construct(paramType);
+                ISerializerExtension? nestedExtension = ((ISerializerExtensionsFactory)this).Construct(paramType);
 
                 if (nestedExtension == null)
                 {
@@ -148,10 +148,10 @@ namespace OrderedSerializer
                 throw new InvalidOperationException();
             }
 
-            ISerializerExtension CtorMethod(Type param1Type, Type param2Type)
+            ISerializerExtension? CtorMethod(Type param1Type, Type param2Type)
             {
-                ISerializerExtension nestedExtension1 = ((ISerializerExtensionsFactory)this).Construct(param1Type);
-                ISerializerExtension nestedExtension2 = ((ISerializerExtensionsFactory)this).Construct(param2Type);
+                ISerializerExtension? nestedExtension1 = ((ISerializerExtensionsFactory)this).Construct(param1Type);
+                ISerializerExtension? nestedExtension2 = ((ISerializerExtensionsFactory)this).Construct(param2Type);
 
                 if (nestedExtension1 == null)
                 {
@@ -171,20 +171,20 @@ namespace OrderedSerializer
                     typeof(ISerializerExtension<>).MakeGenericType(param1Type),
                     typeof(ISerializerExtension<>).MakeGenericType(param2Type)
                 });
-                return (ISerializerExtension)realExtensionCtor.Invoke(new object[] {nestedExtension1, nestedExtension2});
+                return realExtensionCtor?.Invoke(new object[] {nestedExtension1, nestedExtension2}) as ISerializerExtension;
             }
 
             _ctors2.Add(genericTypeDef, CtorMethod);
         }
 
-        public ISerializerExtension Construct(Type type)
+        public ISerializerExtension? Construct(Type type)
         {
             if (_extensions.TryGetValue(type, out var extension))
             {
                 return extension;
             }
 
-            ISerializerExtension result = null;
+            ISerializerExtension? result = null;
             try
             {
                 if (typeof(IDataStruct).IsAssignableFrom(type))
@@ -214,8 +214,8 @@ namespace OrderedSerializer
                     int rank = type.GetArrayRank();
                     if (rank == 1)
                     {
-                        Type elementType = type.GetElementType();
-                        ISerializerExtension elementSerializer = Construct(elementType);
+                        Type? elementType = type.GetElementType();
+                        ISerializerExtension? elementSerializer = elementType != null ? Construct(elementType) : null;
                         if (elementSerializer != null)
                         {
                             Type t = typeof(ArraySerializerExtension<>).MakeGenericType(elementType);
@@ -268,13 +268,13 @@ namespace OrderedSerializer
                 OnError?.Invoke(type, ex);
             }
 
-            _extensions.Add(type ,result);
+            _extensions.Add(type, result);
             return result;
         }
 
-        public ISerializerExtension<T> Construct<T>()
+        public ISerializerExtension<T>? Construct<T>()
         {
-            return (ISerializerExtension<T>)Construct(typeof(T));
+            return Construct(typeof(T)) as ISerializerExtension<T>;
         }
 
         private static void RegisterTypesInAOTGuard()

@@ -78,7 +78,7 @@ namespace OrderedSerializer
             value = _reader.ReadDouble();
         }
 
-        public void Add(ref string value)
+        public void Add(ref string? value)
         {
             value = _reader.ReadString();
         }

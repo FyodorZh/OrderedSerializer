@@ -30,9 +30,9 @@ namespace OrderedSerializer
             });
         }
 
-        private IReadOnlyCollection<object> GetList()
+        private IReadOnlyCollection<object?> GetList()
         {
-            return new object[]
+            return new object?[]
             {
                 (byte)0,
                 (byte)255,
@@ -53,7 +53,7 @@ namespace OrderedSerializer
             };
         }
 
-        private void Check(IReadOnlyCollection<object> objects, Func<IWriter> getWriter, Func<IWriter, IReader> getReader)
+        private void Check(IReadOnlyCollection<object?> objects, Func<IWriter> getWriter, Func<IWriter, IReader> getReader)
         {
             IWriter writer = getWriter();
 
