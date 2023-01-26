@@ -1,9 +1,9 @@
 ﻿<Project>
 
     <PropertyGroup>
-        <BaseIntermediateOutputPath>..\..\..\Tests\obj\OrderedSerializer</BaseIntermediateOutputPath>
-        <BaseOutputPath>..\..\..\Tests\bin\OrderedSerializer</BaseOutputPath>
-        <OutDir>..\..\..\Tests\bin\OrderedSerializer</OutDir>
+        <BaseIntermediateOutputPath>..\..\obj\OrderedSerializer</BaseIntermediateOutputPath>
+        <BaseOutputPath>..\..\bin\OrderedSerializer</BaseOutputPath>
+        <OutDir>..\..\bin\OrderedSerializer</OutDir>
         <Nullable>enable</Nullable>
     </PropertyGroup>
     

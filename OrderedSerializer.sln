@@ -1,8 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderedSerializer", "OrderedSerializer\OrderedSerializer.csproj", "{1132B915-4D0F-4C8A-91CA-8F896F70198C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderedSerializer", "Runtime\OrderedSerializer\OrderedSerializer.csproj", "{1132B915-4D0F-4C8A-91CA-8F896F70198C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderedSerializer.UT", "OrderedSerializer.UT\OrderedSerializer.UT.csproj", "{FB394F78-121E-48D8-A307-61755F87672B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderedSerializer.UT", "Tests\OrderedSerializer.UT\OrderedSerializer.UT.csproj", "{FB394F78-121E-48D8-A307-61755F87672B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
