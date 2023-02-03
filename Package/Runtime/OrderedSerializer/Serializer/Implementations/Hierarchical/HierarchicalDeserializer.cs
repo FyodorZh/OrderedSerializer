@@ -135,7 +135,7 @@ namespace OrderedSerializer
             if (hasVersion)
             {
                 byte version = _reader.ReadByte();
-                _versions.Push(version);
+                _versions.Push(_version);
                 _version = version;
             }
 
