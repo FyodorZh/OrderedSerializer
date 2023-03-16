@@ -6,7 +6,7 @@ namespace OrderedSerializer
 {
     public class SerializerExtensionsFactory : ISerializerExtensionsFactory
     {
-        internal static readonly SerializerExtensionsFactory Instance;
+        public static readonly SerializerExtensionsFactory Instance;
 
         private static bool _isRegisteredInAOTGuard;
         private static readonly object _lock = new object();
