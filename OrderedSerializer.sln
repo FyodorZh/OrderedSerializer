@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderedSerializer", "Packag
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderedSerializer.UT", "OrderedSerializer.UT\OrderedSerializer.UT.csproj", "{FB394F78-121E-48D8-A307-61755F87672B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderedSerializer.Json", "OrderedSerializer.Json\OrderedSerializer.Json.csproj", "{8356D5F0-4A86-4B66-B5EE-036069C243A0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{FB394F78-121E-48D8-A307-61755F87672B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FB394F78-121E-48D8-A307-61755F87672B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FB394F78-121E-48D8-A307-61755F87672B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8356D5F0-4A86-4B66-B5EE-036069C243A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8356D5F0-4A86-4B66-B5EE-036069C243A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8356D5F0-4A86-4B66-B5EE-036069C243A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8356D5F0-4A86-4B66-B5EE-036069C243A0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

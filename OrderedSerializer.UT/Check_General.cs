@@ -2,7 +2,7 @@
 using OrderedSerializer.StructuredBinaryBackend;
 using OrderedSerializer.TypeSerializers;
 
-namespace OrderedSerializer
+namespace OrderedSerializer.UT
 {
     public struct SA : IDataStruct
     {
@@ -47,7 +47,7 @@ namespace OrderedSerializer
     }
 
     [TestFixture]
-    public class Test
+    public class Check_General
     {
         [Test]
         public void DoTest()

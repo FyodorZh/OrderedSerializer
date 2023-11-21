@@ -1,12 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net7.0</TargetFramework>
-        <LangVersion>9</LangVersion>
+        <TargetFramework>net8.0</TargetFramework>
+        <LangVersion>12</LangVersion>
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\OrderedSerializer.Json\OrderedSerializer.Json.csproj" />
       <ProjectReference Include="..\Package\Runtime\OrderedSerializer\OrderedSerializer.csproj" />
     </ItemGroup>
 
