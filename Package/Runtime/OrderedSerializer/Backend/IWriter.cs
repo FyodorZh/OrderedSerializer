@@ -11,6 +11,7 @@
         void WriteFloat(float value);
         void WriteDouble(double value);
         void WriteString(string? value);
+        void WriteBytes(byte[]? value);
     }
 
     public interface IWriter : ILowLevelWriter

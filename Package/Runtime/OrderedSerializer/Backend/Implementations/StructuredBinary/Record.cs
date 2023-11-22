@@ -14,6 +14,7 @@ namespace OrderedSerializer.StructuredBinaryBackend
         Float,
         Double,
         String,
+        Array,
         Section
     }
 
@@ -22,6 +23,7 @@ namespace OrderedSerializer.StructuredBinaryBackend
         public readonly RecordType Type;
         public readonly TypeAlias Value;
         public readonly string? Text;
+        public readonly byte[]? Bytes;
         public readonly List<Record>? Section;
 
         public Record(byte value)
@@ -29,6 +31,7 @@ namespace OrderedSerializer.StructuredBinaryBackend
             Type = RecordType.Byte;
             Value = value;
             Text = null;
+            Bytes = null;
             Section = null;
         }
 
@@ -37,6 +40,7 @@ namespace OrderedSerializer.StructuredBinaryBackend
             Type = RecordType.Char;
             Value = value;
             Text = null;
+            Bytes = null;
             Section = null;
         }
 
@@ -45,6 +49,7 @@ namespace OrderedSerializer.StructuredBinaryBackend
             Type = RecordType.Short;
             Value = value;
             Text = null;
+            Bytes = null;
             Section = null;
         }
 
@@ -53,6 +58,7 @@ namespace OrderedSerializer.StructuredBinaryBackend
             Type = RecordType.Int;
             Value = value;
             Text = null;
+            Bytes = null;
             Section = null;
         }
 
@@ -61,6 +67,7 @@ namespace OrderedSerializer.StructuredBinaryBackend
             Type = RecordType.Long;
             Value = value;
             Text = null;
+            Bytes = null;
             Section = null;
         }
 
@@ -69,6 +76,7 @@ namespace OrderedSerializer.StructuredBinaryBackend
             Type = RecordType.Float;
             Value = value;
             Text = null;
+            Bytes = null;
             Section = null;
         }
 
@@ -77,6 +85,7 @@ namespace OrderedSerializer.StructuredBinaryBackend
             Type = RecordType.Double;
             Value = value;
             Text = null;
+            Bytes = null;
             Section = null;
         }
 
@@ -85,6 +94,16 @@ namespace OrderedSerializer.StructuredBinaryBackend
             Type = RecordType.String;
             Value = 0;
             Text = value;
+            Bytes = null;
+            Section = null;
+        }
+        
+        public Record(byte[]? value)
+        {
+            Type = RecordType.Array;
+            Value = 0;
+            Text = null;
+            Bytes = value;
             Section = null;
         }
 
@@ -93,6 +112,7 @@ namespace OrderedSerializer.StructuredBinaryBackend
             Type = RecordType.Section;
             Value = 0;
             Text = null;
+            Bytes = null;
             Section = value;
         }
 
@@ -139,7 +159,10 @@ namespace OrderedSerializer.StructuredBinaryBackend
                     writer.WriteDouble(Value.DoubleValue);
                     break;
                 case RecordType.String:
-                    writer.WriteString(Text!);
+                    writer.WriteString(Text);
+                    break;
+                case RecordType.Array:
+                    writer.WriteBytes(Bytes);
                     break;
                 case RecordType.Section:
                 {
@@ -172,6 +195,8 @@ namespace OrderedSerializer.StructuredBinaryBackend
                     return new Record(reader.ReadLong());
                 case RecordType.String:
                     return new Record(reader.ReadString());
+                case RecordType.Array:
+                    return new Record(reader.ReadBytes());
                 case RecordType.Section:
                 {
                     int count = reader.ReadInt();
@@ -209,6 +234,8 @@ namespace OrderedSerializer.StructuredBinaryBackend
                     return "double:" + Value.DoubleValue;
                 case RecordType.String:
                     return "text:" + Text;
+                case RecordType.Array:
+                    return "bytes:" + Bytes;
                 case RecordType.Section:
                     return "Section[" + Section!.Count + "]";
                 default:

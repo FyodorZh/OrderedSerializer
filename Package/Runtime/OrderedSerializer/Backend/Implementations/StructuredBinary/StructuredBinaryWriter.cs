@@ -103,5 +103,10 @@ namespace OrderedSerializer.StructuredBinaryBackend
         {
             _section.Add(new Record(value));
         }
+
+        public void WriteBytes(byte[]? value)
+        {
+            _section.Add(new Record(value));
+        }
     }
 }

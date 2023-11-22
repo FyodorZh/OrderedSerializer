@@ -1,3 +1,4 @@
+using System.Buffers.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 
@@ -78,6 +79,18 @@ namespace OrderedSerializer.JsonBackend
         public void WriteString(string? value)
         {
             _currentSection.Add(value);
+        }
+
+        public void WriteBytes(byte[]? value)
+        {
+            if (value == null)
+            {
+                _currentSection.Add(null);
+                return;
+            }
+
+            var base64 = Convert.ToBase64String(value);
+            _currentSection.Add(base64);
         }
 
         public void BeginSection()

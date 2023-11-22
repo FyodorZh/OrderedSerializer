@@ -119,5 +119,12 @@ namespace OrderedSerializer.StructuredBinaryBackend
             CheckType(r, RecordType.String);
             return r.Text;
         }
+        
+        public byte[]? ReadBytes()
+        {
+            Record r = _section[_position++];
+            CheckType(r, RecordType.Array);
+            return r.Bytes;
+        }
     }
 }

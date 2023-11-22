@@ -185,5 +185,23 @@ namespace OrderedSerializer.BinaryBackend
             _position += count;
             return value;
         }
+        
+        public byte[]? ReadBytes()
+        {
+            int count = ReadInt();
+            if (count == 0)
+            {
+                return null;
+            }
+
+            count -= 1;
+
+            Check(count);
+
+            byte[] value = new byte[count];
+            Buffer.BlockCopy(_buffer, _position, value, 0, count);
+            _position += count;
+            return value;
+        }
     }
 }

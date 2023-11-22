@@ -168,5 +168,32 @@ namespace OrderedSerializer.BinaryBackend
                 _size += count;
             }
         }
+
+        public void WriteBytes(byte[]? bytes)
+        {
+            Grow(4);
+            if (bytes == null)
+            {
+                IntToByte map = new IntToByte() {Value = 0};
+                _buffer[_size++] = map.Byte0;
+                _buffer[_size++] = map.Byte1;
+                _buffer[_size++] = map.Byte2;
+                _buffer[_size++] = map.Byte3;
+            }
+            else
+            {
+                int count = bytes.Length;
+
+                IntToByte map = new IntToByte() {Value = count + 1};
+                _buffer[_size++] = map.Byte0;
+                _buffer[_size++] = map.Byte1;
+                _buffer[_size++] = map.Byte2;
+                _buffer[_size++] = map.Byte3;
+
+                Grow(count);
+                Buffer.BlockCopy(bytes, 0, _buffer, _size, count);
+                _size += count;
+            }
+        }
     }
 }

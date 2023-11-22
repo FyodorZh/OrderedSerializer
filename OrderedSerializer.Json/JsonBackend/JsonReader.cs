@@ -120,6 +120,21 @@ namespace OrderedSerializer.JsonBackend
             _cursor += 1;
             return res;
         }
+        
+        public byte[]? ReadBytes()
+        {
+            CheckGrow();
+            var element = _currentSection[_cursor];
+            if (element == null)
+            {
+                _cursor += 1;
+                return null;
+            }
+            var base64 = element.GetValue<string>();
+            var res = Convert.FromBase64String(base64);
+            _cursor += 1;
+            return res;
+        }
 
         public void BeginSection()
         {

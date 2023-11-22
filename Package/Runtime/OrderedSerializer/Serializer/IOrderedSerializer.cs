@@ -25,7 +25,8 @@
         IPrimitiveSerializer<ulong>,
         IPrimitiveSerializer<float>,
         IPrimitiveSerializer<double>,
-        IPrimitiveSerializer<string?>
+        IPrimitiveSerializer<string?>,
+        IPrimitiveSerializer<byte[]?>
     {
     }
 

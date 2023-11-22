@@ -8,7 +8,7 @@ namespace OrderedSerializer
         [ThreadStatic] 
         private static bool _initialized;
         [ThreadStatic] 
-        private static InMemoryReaderWriter _backend = null!;
+        private static ReaderWriterStream _backend = null!;
         
         [ThreadStatic]
         private static HierarchicalSerializer _serializer = null!;
@@ -21,7 +21,7 @@ namespace OrderedSerializer
             if (!_initialized)
             {
                 _initialized = true;
-                _backend = new InMemoryReaderWriter();
+                _backend = new ReaderWriterStream();
                 _serializer = new HierarchicalSerializer(_backend, new TypenameBasedTypeSerializer());
                 _deserializer = new HierarchicalDeserializer(_backend, new TypenameBasedTypeDeserializer());
             }

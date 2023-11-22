@@ -19,6 +19,7 @@ namespace OrderedSerializer.UT
         public int y;
         public string? hello;
         public CA? self;
+        public byte[]? data;
 
         public void Serialize(IOrderedSerializer serializer)
         {
@@ -28,6 +29,7 @@ namespace OrderedSerializer.UT
             }
             serializer.Add(ref y);
             serializer.Add(ref hello);
+            serializer.Add(ref data);
             serializer.AddClass(ref self);
         }
 
@@ -62,6 +64,7 @@ namespace OrderedSerializer.UT
             r0.a.self = r0.a;
             r0.a.y = 7;
             r0.a.hello = "hello";
+            r0.a.data = new byte[] { 1, 2, 3 };
 
             StructuredBinaryReader dataReader;
             {

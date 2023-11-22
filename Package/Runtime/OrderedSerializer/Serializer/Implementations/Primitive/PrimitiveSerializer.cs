@@ -82,5 +82,10 @@ namespace OrderedSerializer
         {
             _writer.WriteString(value);
         }
+        
+        public void Add(ref byte[]? value)
+        {
+            _writer.WriteBytes(value);
+        }
     }
 }

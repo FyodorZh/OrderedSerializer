@@ -64,7 +64,11 @@ namespace OrderedSerializer.UT
                 "hello",
                 "world",
                 null,
-                ""
+                "",
+                (byte[]?)null,
+                new byte[]{},
+                new byte[]{1},
+                new byte[]{200,201,202}
             };
         }
 
@@ -78,41 +82,49 @@ namespace OrderedSerializer.UT
                 {
                     writer.WriteBool(boolValue);
                 }
-                if (obj is Byte byteValue)
+                else if (obj is Byte byteValue)
                 {
                     writer.WriteByte(byteValue);
                 }
-                if (obj is Char charValue)
+                else if (obj is Char charValue)
                 {
                     writer.WriteChar(charValue);
                 }
-                if (obj is short shortValue)
+                else if (obj is short shortValue)
                 {
                     writer.WriteShort(shortValue);
                 }
-                if (obj is int intValue)
+                else if (obj is int intValue)
                 {
                     writer.WriteInt(intValue);
                 }
-                if (obj is long longValue)
+                else if (obj is long longValue)
                 {
                     writer.WriteLong(longValue);
                 }
-                if (obj is float floatValue)
+                else if (obj is float floatValue)
                 {
                     writer.WriteFloat(floatValue);
                 }
-                if (obj is double doubleValue)
+                else if (obj is double doubleValue)
                 {
                     writer.WriteDouble(doubleValue);
                 }
-                if (obj is string stringValue)
+                else if (obj is string stringValue)
                 {
                     writer.WriteString(stringValue);
                 }
-                if (obj == null)
+                else if (obj is byte[] arrayValue)
+                {
+                    writer.WriteBytes(arrayValue);
+                }
+                else if (obj == null)
                 {
                     writer.WriteString(null);
+                }
+                else
+                {
+                    Assert.Fail("Unknown type");
                 }
             }
 
@@ -124,41 +136,49 @@ namespace OrderedSerializer.UT
                 {
                     Assert.That(reader.ReadBool(), Is.EqualTo(boolValue));
                 }
-                if (obj is Byte byteValue)
+                else if (obj is Byte byteValue)
                 {
-                    Assert.That(reader.ReadByte(), Is.EqualTo(byteValue));;
+                    Assert.That(reader.ReadByte(), Is.EqualTo(byteValue));
                 }
                 else if (obj is Char charValue)
                 {
-                    Assert.That(reader.ReadChar(), Is.EqualTo(charValue));;
+                    Assert.That(reader.ReadChar(), Is.EqualTo(charValue));
                 }
                 else if (obj is short shortValue)
                 {
-                    Assert.That(reader.ReadShort(), Is.EqualTo(shortValue));;
+                    Assert.That(reader.ReadShort(), Is.EqualTo(shortValue));
                 }
                 else if (obj is int intValue)
                 {
-                    Assert.That(reader.ReadInt(), Is.EqualTo(intValue));;
+                    Assert.That(reader.ReadInt(), Is.EqualTo(intValue));
                 }
                 else if (obj is long longValue)
                 {
-                    Assert.That(reader.ReadLong(), Is.EqualTo(longValue));;
+                    Assert.That(reader.ReadLong(), Is.EqualTo(longValue));
                 }
                 else if (obj is float floatValue)
                 {
-                    Assert.That(reader.ReadFloat(), Is.EqualTo(floatValue));;
+                    Assert.That(reader.ReadFloat(), Is.EqualTo(floatValue));
                 }
                 else if (obj is double doubleValue)
                 {
-                    Assert.That(reader.ReadDouble(), Is.EqualTo(doubleValue));;
+                    Assert.That(reader.ReadDouble(), Is.EqualTo(doubleValue));
                 }
                 else if (obj is string stringValue)
                 {
-                    Assert.That(reader.ReadString(), Is.EqualTo(stringValue));;
+                    Assert.That(reader.ReadString(), Is.EqualTo(stringValue));
+                }
+                else if (obj is byte[] arrayValue)
+                {
+                    Assert.That(reader.ReadBytes(), Is.EqualTo(arrayValue));
                 }
                 else if (obj == null)
                 {
-                    Assert.That(reader.ReadString(), Is.EqualTo(null));;
+                    Assert.That(reader.ReadString(), Is.EqualTo(null));
+                }
+                else
+                {
+                    Assert.Fail("Unknown type");
                 }
             }
         }

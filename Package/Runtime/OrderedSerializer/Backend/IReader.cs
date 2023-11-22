@@ -11,6 +11,7 @@
         float ReadFloat();
         double ReadDouble();
         string? ReadString();
+        byte[]? ReadBytes();
     }
 
     public interface IReader : ILowLevelReader

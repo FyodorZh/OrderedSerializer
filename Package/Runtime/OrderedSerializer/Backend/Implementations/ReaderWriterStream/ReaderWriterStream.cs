@@ -2,7 +2,7 @@
 
 namespace OrderedSerializer
 {
-    public class InMemoryReaderWriter : IReader, IWriter
+    public class ReaderWriterStream : IReader, IWriter
     {
         private readonly Queue<bool> _bools = new Queue<bool>();
         private readonly Queue<byte> _bytes = new Queue<byte>();
@@ -13,6 +13,7 @@ namespace OrderedSerializer
         private readonly Queue<float> _floats = new Queue<float>();
         private readonly Queue<double> _doubles = new Queue<double>();
         private readonly Queue<string?> _strings = new Queue<string?>();
+        private readonly Queue<byte[]?> _arrays = new Queue<byte[]?>();
 
         public bool IsEmpty =>
             _bools.Count == 0 &&
@@ -23,7 +24,8 @@ namespace OrderedSerializer
             _longs.Count == 0 &&
             _floats.Count == 0 &&
             _doubles.Count == 0 &&
-            _strings.Count == 0;
+            _strings.Count == 0 &&
+            _arrays.Count == 0;
 
         public void Clear()
         {
@@ -36,6 +38,7 @@ namespace OrderedSerializer
             _floats.Clear();
             _doubles.Clear();
             _strings.Clear();
+            _arrays.Clear();
         }
 
         public bool ReadBool()
@@ -81,6 +84,11 @@ namespace OrderedSerializer
         public string? ReadString()
         {
             return _strings.Dequeue();
+        }
+
+        public byte[]? ReadBytes()
+        {
+            return _arrays.Dequeue();
         }
 
         void IWriter.BeginSection()
@@ -146,6 +154,11 @@ namespace OrderedSerializer
         public void WriteString(string? value)
         {
             _strings.Enqueue(value);
+        }
+
+        public void WriteBytes(byte[]? value)
+        {
+            _arrays.Enqueue(value);
         }
     }
 }
