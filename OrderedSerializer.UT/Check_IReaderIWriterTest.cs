@@ -122,43 +122,43 @@ namespace OrderedSerializer.UT
             {
                 if (obj is Boolean boolValue)
                 {
-                    Assert.AreEqual(boolValue, reader.ReadBool());
+                    Assert.That(reader.ReadBool(), Is.EqualTo(boolValue));
                 }
                 if (obj is Byte byteValue)
                 {
-                    Assert.AreEqual(byteValue, reader.ReadByte());
+                    Assert.That(reader.ReadByte(), Is.EqualTo(byteValue));;
                 }
                 else if (obj is Char charValue)
                 {
-                    Assert.AreEqual(charValue, reader.ReadChar());
+                    Assert.That(reader.ReadChar(), Is.EqualTo(charValue));;
                 }
                 else if (obj is short shortValue)
                 {
-                    Assert.AreEqual(shortValue, reader.ReadShort());
+                    Assert.That(reader.ReadShort(), Is.EqualTo(shortValue));;
                 }
                 else if (obj is int intValue)
                 {
-                    Assert.AreEqual(intValue, reader.ReadInt());
+                    Assert.That(reader.ReadInt(), Is.EqualTo(intValue));;
                 }
                 else if (obj is long longValue)
                 {
-                    Assert.AreEqual(longValue, reader.ReadLong());
+                    Assert.That(reader.ReadLong(), Is.EqualTo(longValue));;
                 }
                 else if (obj is float floatValue)
                 {
-                    Assert.AreEqual(floatValue, reader.ReadFloat());
+                    Assert.That(reader.ReadFloat(), Is.EqualTo(floatValue));;
                 }
                 else if (obj is double doubleValue)
                 {
-                    Assert.AreEqual(doubleValue, reader.ReadDouble());
+                    Assert.That(reader.ReadDouble(), Is.EqualTo(doubleValue));;
                 }
                 else if (obj is string stringValue)
                 {
-                    Assert.AreEqual(stringValue, reader.ReadString());
+                    Assert.That(reader.ReadString(), Is.EqualTo(stringValue));;
                 }
                 else if (obj == null)
                 {
-                    Assert.AreEqual(null, reader.ReadString());
+                    Assert.That(reader.ReadString(), Is.EqualTo(null));;
                 }
             }
         }
