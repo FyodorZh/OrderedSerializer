@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System.Collections.Generic;
+using NUnit.Framework;
 using OrderedSerializer.StructuredBinaryBackend;
 using OrderedSerializer.TypeSerializers;
 
@@ -20,6 +21,9 @@ namespace OrderedSerializer.UT
         public string? hello;
         public CA? self;
         public byte[]? data;
+        public short[]? array;
+        public List<short>? shortList;
+        public List<string?>? stringList;
 
         public void Serialize(IOrderedSerializer serializer)
         {
@@ -30,6 +34,9 @@ namespace OrderedSerializer.UT
             serializer.Add(ref y);
             serializer.Add(ref hello);
             serializer.Add(ref data);
+            serializer.Add(ref array);
+            serializer.Add(ref shortList);
+            serializer.Add(ref stringList);
             serializer.AddClass(ref self);
         }
 
@@ -65,6 +72,9 @@ namespace OrderedSerializer.UT
             r0.a.y = 7;
             r0.a.hello = "hello";
             r0.a.data = new byte[] { 1, 2, 3 };
+            r0.a.array = new short[] { 3, 400 };
+            r0.a.shortList = new List<short>() { 1, 23, 5 };
+            r0.a.stringList = new List<string?>() { "hello", null, "world" };
 
             StructuredBinaryReader dataReader;
             {
