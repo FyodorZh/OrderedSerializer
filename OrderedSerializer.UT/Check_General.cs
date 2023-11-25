@@ -24,6 +24,8 @@ namespace OrderedSerializer.UT
         public short[]? array;
         public List<short>? shortList;
         public List<string?>? stringList;
+        public int? pInt;
+        public SA? pSA;
 
         public void Serialize(IOrderedSerializer serializer)
         {
@@ -37,6 +39,8 @@ namespace OrderedSerializer.UT
             serializer.Add(ref array);
             serializer.Add(ref shortList);
             serializer.Add(ref stringList);
+            serializer.Add(ref pInt);
+            serializer.Add(ref pSA);
             serializer.AddClass(ref self);
         }
 

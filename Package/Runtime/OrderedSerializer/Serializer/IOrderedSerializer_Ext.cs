@@ -4,6 +4,64 @@ namespace OrderedSerializer
 {
     public static class IOrderedSerializer_Ext
     {
+        public static void Add<T>(this IPrimitiveSerializer<T> serializer, ref T? value)
+            where T : struct
+        {
+            if (serializer.IsWriter)
+            {
+                bool isNull = value == null;
+                serializer.Writer.WriteBool(isNull);
+                if (!isNull)
+                {
+                    T tmp = value!.Value;
+                    serializer.Add(ref tmp);
+                }
+            }
+            else
+            {
+                bool isNull = serializer.Reader.ReadBool();
+                if (isNull)
+                {
+                    value = null;
+                }
+                else
+                {
+                    T tmp = default(T);
+                    serializer.Add(ref tmp);
+                    value = tmp;
+                }
+            }
+        }
+        
+        public static void Add<T>(this IOrderedSerializer serializer, ref T? value)
+            where T : struct, IDataStruct
+        {
+            if (serializer.IsWriter)
+            {
+                bool isNull = value == null;
+                serializer.Writer.WriteBool(isNull);
+                if (!isNull)
+                {
+                    T tmp = value!.Value;
+                    serializer.AddStruct(ref tmp);
+                }
+            }
+            else
+            {
+                bool isNull = serializer.Reader.ReadBool();
+                if (isNull)
+                {
+                    value = null;
+                }
+                else
+                {
+                    T tmp = default(T);
+                    serializer.AddStruct(ref tmp);
+                    value = tmp;
+                }
+            }
+        }
+
         public static void Add<T>(this IPrimitiveSerializer<T?> serializer, ref T?[]? array)
         {
             if (serializer.IsWriter)
