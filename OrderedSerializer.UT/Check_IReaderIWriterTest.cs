@@ -47,25 +47,32 @@ namespace OrderedSerializer.UT
             {
                 true,
                 false,
-                (byte)0,
-                (byte)255,
+                byte.MinValue,
+                byte.MaxValue,
+                sbyte.MinValue,
+                sbyte.MaxValue,
                 'x',
                 'z',
                 '\0',
-                (short)400,
-                (short)-1,
-                1,
-                -7,
-                -100000,
-                -1L,
-                10000000000000L,
+                short.MinValue,
+                short.MaxValue,
+                ushort.MinValue,
+                ushort.MaxValue,
+                int.MinValue,
+                int.MaxValue,
+                uint.MinValue,
+                uint.MaxValue,
+                long.MinValue,
+                long.MaxValue,
+                ulong.MinValue,
+                ulong.MaxValue,
                 0.25f,
                 0.5,
                 "hello",
                 "world",
                 null,
                 "",
-                (byte[]?)null,
+                null,
                 new byte[]{},
                 new byte[]{1},
                 new byte[]{200,201,202}
@@ -78,53 +85,56 @@ namespace OrderedSerializer.UT
 
             foreach (var obj in objects)
             {
-                if (obj is Boolean boolValue)
+                switch (obj)
                 {
-                    writer.WriteBool(boolValue);
-                }
-                else if (obj is Byte byteValue)
-                {
-                    writer.WriteByte(byteValue);
-                }
-                else if (obj is Char charValue)
-                {
-                    writer.WriteChar(charValue);
-                }
-                else if (obj is short shortValue)
-                {
-                    writer.WriteShort(shortValue);
-                }
-                else if (obj is int intValue)
-                {
-                    writer.WriteInt(intValue);
-                }
-                else if (obj is long longValue)
-                {
-                    writer.WriteLong(longValue);
-                }
-                else if (obj is float floatValue)
-                {
-                    writer.WriteFloat(floatValue);
-                }
-                else if (obj is double doubleValue)
-                {
-                    writer.WriteDouble(doubleValue);
-                }
-                else if (obj is string stringValue)
-                {
-                    writer.WriteString(stringValue);
-                }
-                else if (obj is byte[] arrayValue)
-                {
-                    writer.WriteBytes(arrayValue);
-                }
-                else if (obj == null)
-                {
-                    writer.WriteString(null);
-                }
-                else
-                {
-                    Assert.Fail("Unknown type");
+                    case bool boolValue:
+                        writer.WriteBool(boolValue);
+                        break;
+                    case byte byteValue:
+                        writer.WriteByte(byteValue);
+                        break;
+                    case sbyte sbyteValue:
+                        writer.WriteSByte(sbyteValue);
+                        break;
+                    case char charValue:
+                        writer.WriteChar(charValue);
+                        break;
+                    case short shortValue:
+                        writer.WriteShort(shortValue);
+                        break;
+                    case ushort ushortValue:
+                        writer.WriteUShort(ushortValue);
+                        break;
+                    case int intValue:
+                        writer.WriteInt(intValue);
+                        break;
+                    case uint uintValue:
+                        writer.WriteUInt(uintValue);
+                        break;
+                    case long longValue:
+                        writer.WriteLong(longValue);
+                        break;
+                    case ulong ulongValue:
+                        writer.WriteULong(ulongValue);
+                        break;
+                    case float floatValue:
+                        writer.WriteFloat(floatValue);
+                        break;
+                    case double doubleValue:
+                        writer.WriteDouble(doubleValue);
+                        break;
+                    case string stringValue:
+                        writer.WriteString(stringValue);
+                        break;
+                    case byte[] arrayValue:
+                        writer.WriteBytes(arrayValue);
+                        break;
+                    case null:
+                        writer.WriteString(null);
+                        break;
+                    default:
+                        Assert.Fail("Unknown type");
+                        break;
                 }
             }
 
@@ -132,53 +142,56 @@ namespace OrderedSerializer.UT
 
             foreach (var obj in objects)
             {
-                if (obj is Boolean boolValue)
+                switch (obj)
                 {
-                    Assert.That(reader.ReadBool(), Is.EqualTo(boolValue));
-                }
-                else if (obj is Byte byteValue)
-                {
-                    Assert.That(reader.ReadByte(), Is.EqualTo(byteValue));
-                }
-                else if (obj is Char charValue)
-                {
-                    Assert.That(reader.ReadChar(), Is.EqualTo(charValue));
-                }
-                else if (obj is short shortValue)
-                {
-                    Assert.That(reader.ReadShort(), Is.EqualTo(shortValue));
-                }
-                else if (obj is int intValue)
-                {
-                    Assert.That(reader.ReadInt(), Is.EqualTo(intValue));
-                }
-                else if (obj is long longValue)
-                {
-                    Assert.That(reader.ReadLong(), Is.EqualTo(longValue));
-                }
-                else if (obj is float floatValue)
-                {
-                    Assert.That(reader.ReadFloat(), Is.EqualTo(floatValue));
-                }
-                else if (obj is double doubleValue)
-                {
-                    Assert.That(reader.ReadDouble(), Is.EqualTo(doubleValue));
-                }
-                else if (obj is string stringValue)
-                {
-                    Assert.That(reader.ReadString(), Is.EqualTo(stringValue));
-                }
-                else if (obj is byte[] arrayValue)
-                {
-                    Assert.That(reader.ReadBytes(), Is.EqualTo(arrayValue));
-                }
-                else if (obj == null)
-                {
-                    Assert.That(reader.ReadString(), Is.EqualTo(null));
-                }
-                else
-                {
-                    Assert.Fail("Unknown type");
+                    case bool boolValue:
+                        Assert.That(reader.ReadBool(), Is.EqualTo(boolValue));
+                        break;
+                    case byte byteValue:
+                        Assert.That(reader.ReadByte(), Is.EqualTo(byteValue));
+                        break;
+                    case sbyte sbyteValue:
+                        Assert.That(reader.ReadSByte(), Is.EqualTo(sbyteValue));
+                        break;
+                    case char charValue:
+                        Assert.That(reader.ReadChar(), Is.EqualTo(charValue));
+                        break;
+                    case short shortValue:
+                        Assert.That(reader.ReadShort(), Is.EqualTo(shortValue));
+                        break;
+                    case ushort ushortValue:
+                        Assert.That(reader.ReadUShort(), Is.EqualTo(ushortValue));
+                        break;
+                    case int intValue:
+                        Assert.That(reader.ReadInt(), Is.EqualTo(intValue));
+                        break;
+                    case uint uintValue:
+                        Assert.That(reader.ReadUInt(), Is.EqualTo(uintValue));
+                        break;
+                    case long longValue:
+                        Assert.That(reader.ReadLong(), Is.EqualTo(longValue));
+                        break;
+                    case ulong ulongValue:
+                        Assert.That(reader.ReadULong(), Is.EqualTo(ulongValue));
+                        break;
+                    case float floatValue:
+                        Assert.That(reader.ReadFloat(), Is.EqualTo(floatValue));
+                        break;
+                    case double doubleValue:
+                        Assert.That(reader.ReadDouble(), Is.EqualTo(doubleValue));
+                        break;
+                    case string stringValue:
+                        Assert.That(reader.ReadString(), Is.EqualTo(stringValue));
+                        break;
+                    case byte[] arrayValue:
+                        Assert.That(reader.ReadBytes(), Is.EqualTo(arrayValue));
+                        break;
+                    case null:
+                        Assert.That(reader.ReadString(), Is.EqualTo(null));
+                        break;
+                    default:
+                        Assert.Fail("Unknown type");
+                        break;
                 }
             }
         }

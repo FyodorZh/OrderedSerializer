@@ -19,4 +19,27 @@
         void BeginSection();
         void EndSection();
     }
+
+    public static class ILowLevelWriter_Ext
+    {
+        public static void WriteSByte(this ILowLevelWriter writer, sbyte value)
+        {
+            writer.WriteByte(unchecked((byte)value));
+        }
+
+        public static void WriteUShort(this ILowLevelWriter writer, ushort value)
+        {
+            writer.WriteShort(unchecked((short)value));
+        }
+
+        public static void WriteUInt(this ILowLevelWriter writer, uint value)
+        {
+            writer.WriteInt(unchecked((int)value));
+        }
+
+        public static void WriteULong(this ILowLevelWriter writer, ulong value)
+        {
+            writer.WriteLong(unchecked((long)value));
+        }
+    }
 }
