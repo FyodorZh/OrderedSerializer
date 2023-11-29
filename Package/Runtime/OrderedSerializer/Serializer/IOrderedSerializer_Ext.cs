@@ -132,39 +132,79 @@ namespace OrderedSerializer
             }
         }
 
+        private static void WriteList<T>(IPrimitiveSerializer<T?> serializer,
+            IReadOnlyList<T?>? list)
+        {
+            if (list == null)
+            {
+                serializer.Writer.WriteInt(0);
+            }
+            else
+            {
+                int count = list.Count;
+                serializer.Writer.WriteInt(count + 1);
+                for (int i = 0; i < count; ++i)
+                {
+                    var tmp = list[i];
+                    serializer.Add(ref tmp);
+                }
+            }
+        }
+
+        private static T?[]? ReadAsArray<T>(IPrimitiveSerializer<T?> serializer)
+        {
+            int count = serializer.Reader.ReadInt();
+            if (count <= 0)
+            {
+                return null;
+            }
+
+            count -= 1;
+
+            if (count == 0)
+            {
+                return Array.Empty<T?>();
+            }
+            
+            var array = new T?[count];
+            for (int i = 0; i < count; ++i)
+            {
+                serializer.Add(ref array[i]);
+            }
+
+            return array;
+        }
+        
+        private static List<T?>? ReadAsList<T>(IPrimitiveSerializer<T?> serializer)
+        {
+            int count = serializer.Reader.ReadInt();
+            if (count <= 0)
+            {
+                return null;
+            }
+
+            count -= 1;
+            
+            var list = new List<T?>(count);
+            for (int i = 0; i < count; ++i)
+            {
+                var element = default(T);
+                serializer.Add(ref element);
+                list.Add(element);
+            }
+
+            return list;
+        }
+
         public static void Add<T>(this IPrimitiveSerializer<T?> serializer, ref T?[]? array)
         {
             if (serializer.IsWriter)
             {
-                if (array == null)
-                {
-                    serializer.Writer.WriteInt(0);
-                }
-                else
-                {
-                    int count = array.Length;
-                    serializer.Writer.WriteInt(count + 1);
-                    for (int i = 0; i < count; ++i)
-                    {
-                        serializer.Add(ref array[i]);
-                    }
-                }
+                WriteList(serializer, array);
             }
             else
             {
-                int count = serializer.Reader.ReadInt();
-                if (count <= 0)
-                {
-                    array = null;
-                    return;
-                }
-
-                count -= 1;
-                array = new T[count];
-                for (int i = 0; i < count; ++i)
-                {
-                    serializer.Add(ref array[i]);
-                }
+                array = ReadAsArray(serializer);
             }
         }
         
@@ -172,38 +212,23 @@ namespace OrderedSerializer
         {
             if (serializer.IsWriter)
             {
-                if (list == null)
-                {
-                    serializer.Writer.WriteInt(0);
-                }
-                else
-                {
-                    int count = list.Count;
-                    serializer.Writer.WriteInt(count + 1);
-                    for (int i = 0; i < count; ++i)
-                    {
-                        var element = list[i];
-                        serializer.Add(ref element);
-                    }
-                }
+                WriteList(serializer, list);
             }
             else
             {
-                int count = serializer.Reader.ReadInt();
-                if (count <= 0)
-                {
-                    list = null;
-                    return;
-                }
-
-                count -= 1;
-                list = new List<T?>(count);
-                for (int i = 0; i < count; ++i)
-                {
-                    var element = default(T);
-                    serializer.Add(ref element);
-                    list.Add(element);
-                }
+                list = ReadAsList(serializer);
+            }
+        }
+        
+        public static void Add<T>(this IPrimitiveSerializer<T?> serializer, ref IReadOnlyList<T?>? list)
+        {
+            if (serializer.IsWriter)
+            {
+                WriteList(serializer, list);
+            }
+            else
+            {
+                list = ReadAsArray(serializer);
             }
         }
     }
