@@ -68,35 +68,7 @@ namespace OrderedSerializer
             }
             else
             {
-                var type = value.GetType();
-                if (!_typeMap.TryGetValue(type, out short typeId))
-                {
-                    typeId = (short)_typeMap.Count;
-                    checked
-                    {
-                        typeId += 1;
-                    }
-
-                    if (null == type.GetConstructor(
-                        BindingFlags.CreateInstance |
-                        BindingFlags.Instance |
-                        BindingFlags.Public |
-                        BindingFlags.NonPublic,
-                        null,
-                        new Type[0],
-                        null))
-                    {
-                        throw new InvalidOperationException("Type '" + type + "' must have default constructor (public or non-public)");
-                    }
-
-                    _typeMap.Add(type, typeId);
-                    _writer.WriteShort(typeId);
-                    _typeSerializer.Serialize(_writer, type);
-                }
-                else
-                {
-                    _writer.WriteShort(typeId);
-                }
+                SerializeType(value.GetType());
 
                 _writer.BeginSection();
                 SerializeClass(value);
@@ -127,6 +99,38 @@ namespace OrderedSerializer
             else
             {
                 value.Serialize(this);
+            }
+        }
+
+        private void SerializeType(Type type)
+        {
+            if (!_typeMap.TryGetValue(type, out short typeId))
+            {
+                typeId = (short)_typeMap.Count;
+                checked
+                {
+                    typeId += 1;
+                }
+
+                if (null == type.GetConstructor(
+                        BindingFlags.CreateInstance |
+                        BindingFlags.Instance |
+                        BindingFlags.Public |
+                        BindingFlags.NonPublic,
+                        null,
+                        Type.EmptyTypes,
+                        null))
+                {
+                    throw new InvalidOperationException("Type '" + type + "' must have default constructor (public or non-public)");
+                }
+
+                _typeMap.Add(type, typeId);
+                _writer.WriteShort(typeId);
+                _typeSerializer.Serialize(_writer, type);
+            }
+            else
+            {
+                _writer.WriteShort(typeId);
             }
         }
     }

@@ -208,15 +208,14 @@ namespace OrderedSerializer
                 }
             }
 
-            private static readonly Type[] VoidTypeList = new Type[0];
 
             public static IConstructor Build(Type type)
             {
-                if (type.GetConstructor(VoidTypeList) != null)
+                if (type.GetConstructor(Type.EmptyTypes) != null)
                 {
                     Type genericCtor = typeof(TypeConstructor<>);
-                    Type typeCtor = genericCtor.MakeGenericType(new Type[] {type});
-                    return (IConstructor)typeCtor.GetConstructor(new Type[0]).Invoke(new object[0]);
+                    Type typeCtor = genericCtor.MakeGenericType(type);
+                    return (IConstructor)typeCtor.GetConstructor(Type.EmptyTypes).Invoke(Array.Empty<object>());
                 }
 
                 return new ReflectionBasedConstructor(type);
