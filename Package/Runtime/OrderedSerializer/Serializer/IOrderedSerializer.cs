@@ -12,6 +12,11 @@
         void Add(ref T value);
     }
 
+    public interface IPrimitiveClassSerializer<T> : IPrimitiveSerializer<T?>
+        where T : class
+    {
+    }
+        
     public interface IPrimitiveSerializer :
         IPrimitiveSerializer<bool>,
         IPrimitiveSerializer<byte>,
@@ -25,8 +30,8 @@
         IPrimitiveSerializer<ulong>,
         IPrimitiveSerializer<float>,
         IPrimitiveSerializer<double>,
-        IPrimitiveSerializer<string?>,
-        IPrimitiveSerializer<byte[]?>
+        IPrimitiveClassSerializer<string>,
+        IPrimitiveClassSerializer<byte[]>
     {
     }
 
