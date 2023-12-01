@@ -1,5 +1,24 @@
 ﻿namespace OrderedSerializer
 {
+    public interface ILowLevelPrimitiveWriter<in T>
+    {
+        void Write(T value);
+    }
+    
+    public interface ILowLevelGenericWriter :
+        ILowLevelPrimitiveWriter<bool>,
+        ILowLevelPrimitiveWriter<byte>,
+        ILowLevelPrimitiveWriter<char>,
+        ILowLevelPrimitiveWriter<short>,
+        ILowLevelPrimitiveWriter<int>,
+        ILowLevelPrimitiveWriter<long>,
+        ILowLevelPrimitiveWriter<float>,
+        ILowLevelPrimitiveWriter<double>,
+        ILowLevelPrimitiveWriter<string?>,
+        ILowLevelPrimitiveWriter<byte[]?>
+    {
+    }
+    
     public interface ILowLevelWriter
     {
         void WriteBool(bool value);

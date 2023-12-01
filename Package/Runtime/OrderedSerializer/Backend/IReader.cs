@@ -1,5 +1,24 @@
 ﻿namespace OrderedSerializer
 {
+    public interface ILowLevelPrimitiveReader<T>
+    {
+        void Read(out T value);
+    }
+
+    public interface ILowLevelGenericReader :
+        ILowLevelPrimitiveReader<bool>,
+        ILowLevelPrimitiveReader<byte>,
+        ILowLevelPrimitiveReader<char>,
+        ILowLevelPrimitiveReader<short>,
+        ILowLevelPrimitiveReader<int>,
+        ILowLevelPrimitiveReader<long>,
+        ILowLevelPrimitiveReader<float>,
+        ILowLevelPrimitiveReader<double>,
+        ILowLevelPrimitiveReader<string?>,
+        ILowLevelPrimitiveReader<byte[]?>
+    {
+    }
+    
     public interface ILowLevelReader
     {
         bool ReadBool();
