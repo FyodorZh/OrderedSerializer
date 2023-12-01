@@ -68,27 +68,5 @@ namespace OrderedSerializer
                 }
             }
         }
-
-        
-
-        public static void Add<TSerializer, TKey, TValue>(this TSerializer serializer, ref KeyValuePair<TKey, TValue?> kv)
-            where TSerializer : IPrimitiveSerializer<TKey>, IPrimitiveSerializer<TValue?>
-        {
-            if (serializer.IsWriter)
-            {
-                var k = kv.Key;
-                var v = kv.Value;
-                serializer.Add(ref k);
-                serializer.Add(ref v);
-            }
-            else
-            {
-                TKey k = default(TKey)!;
-                var v = default(TValue);
-                serializer.Add(ref k);
-                serializer.Add(ref v);
-                kv = new KeyValuePair<TKey, TValue?>(k, v);
-            }
-        }
     }
 }
