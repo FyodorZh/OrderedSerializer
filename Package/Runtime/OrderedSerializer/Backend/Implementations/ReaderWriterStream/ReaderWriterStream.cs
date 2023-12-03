@@ -4,7 +4,7 @@ namespace OrderedSerializer
 {
     public class ReaderWriterStream : IReader, IWriter
     {
-        private readonly Queue<bool> _bools = new Queue<bool>();
+        private readonly Queue<bool> _booleans = new Queue<bool>();
         private readonly Queue<byte> _bytes = new Queue<byte>();
         private readonly Queue<char> _chars = new Queue<char>();
         private readonly Queue<short> _shorts = new Queue<short>();
@@ -16,7 +16,7 @@ namespace OrderedSerializer
         private readonly Queue<byte[]?> _arrays = new Queue<byte[]?>();
 
         public bool IsEmpty =>
-            _bools.Count == 0 &&
+            _booleans.Count == 0 &&
             _bytes.Count == 0 &&
             _chars.Count == 0 &&
             _shorts.Count == 0 &&
@@ -29,7 +29,7 @@ namespace OrderedSerializer
 
         public void Clear()
         {
-            _bools.Clear(); 
+            _booleans.Clear(); 
             _bytes.Clear();
             _chars.Clear();
             _shorts.Clear();
@@ -43,7 +43,7 @@ namespace OrderedSerializer
 
         public bool ReadBool()
         {
-            return _bools.Dequeue();
+            return _booleans.Dequeue();
         }
 
         public byte ReadByte()
@@ -113,7 +113,7 @@ namespace OrderedSerializer
 
         public void WriteBool(bool value)
         {
-            _bools.Enqueue(value);
+            _booleans.Enqueue(value);
         }
 
         public void WriteByte(byte value)
