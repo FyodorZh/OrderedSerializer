@@ -4,7 +4,7 @@ using System.Reflection;
 
 namespace OrderedSerializer
 {
-    public class HierarchicalSerializer : PrimitiveSerializer, IOrderedSerializer
+    public class HierarchicalSerializer : PrimitiveSerializer, IOrderedWriter
     {
         private readonly ITypeSerializer _typeSerializer;
 
@@ -82,6 +82,16 @@ namespace OrderedSerializer
             if (extension == null)
                 throw new InvalidOperationException($"{typeof(T)} must be recognizable by extensions factory");
             extension.Add(this, ref value);
+        }
+
+        public IOrderedReader AsReader()
+        {
+            throw new InvalidOperationException();
+        }
+
+        public IOrderedWriter AsWriter()
+        {
+            return this;
         }
 
         protected virtual void SerializeClass(IDataStruct value)

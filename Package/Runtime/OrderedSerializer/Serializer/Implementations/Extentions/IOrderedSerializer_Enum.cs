@@ -7,7 +7,7 @@ namespace OrderedSerializer
         /// <summary>
         /// Enum of any base type
         /// </summary>
-        public static void Add<T>(this ISerializer serializer, ref T value)
+        public static void Add<T>(this IOrderedSerializerCore serializer, ref T value)
             where T : struct, Enum
         {
             if (serializer.IsWriter)

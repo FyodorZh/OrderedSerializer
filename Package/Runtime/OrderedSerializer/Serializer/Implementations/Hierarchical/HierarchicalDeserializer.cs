@@ -4,7 +4,7 @@ using System.Reflection;
 
 namespace OrderedSerializer
 {
-    public class HierarchicalDeserializer : PrimitiveDeserializer, IOrderedSerializer
+    public class HierarchicalDeserializer : PrimitiveDeserializer, IOrderedReader
     {
         private readonly ITypeDeserializer _typeDeserializer;
 
@@ -114,6 +114,16 @@ namespace OrderedSerializer
             if (extension == null)
                 throw new InvalidOperationException($"{typeof(T)} must be recognizable by extensions factory");
             extension.Add(this, ref value);
+        }
+
+        public IOrderedReader AsReader()
+        {
+            return this;
+        }
+
+        public IOrderedWriter AsWriter()
+        {
+            throw new InvalidOperationException();
         }
 
         protected virtual T? DeserializeClass<T>(IConstructor ctor)

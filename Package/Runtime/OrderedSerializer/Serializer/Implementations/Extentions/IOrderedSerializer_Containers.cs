@@ -50,7 +50,7 @@ namespace OrderedSerializer
             }
         }
         
-        private static void WriteList<T>(IPrimitiveSerializer<T?> serializer, IReadOnlyList<T?>? list)
+        private static void WriteList<T>(IPrimitiveWriter<T?> serializer, IReadOnlyList<T?>? list)
         {
             if (list == null)
             {
@@ -62,8 +62,7 @@ namespace OrderedSerializer
                 serializer.Writer.WriteInt(count + 1);
                 for (int i = 0; i < count; ++i)
                 {
-                    var tmp = list[i];
-                    serializer.Add(ref tmp);
+                    serializer.Write(list[i]);
                 }
             }
         }
