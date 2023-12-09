@@ -23,7 +23,7 @@ namespace OrderedSerializer.UT
             writer.WriteChar('\n');
             Assert.That(writer.ToJsonString(), Is.EqualTo("[true,false,123,\"a\",\"\\n\"]"));
             
-            writer.Reset();
+            writer.Clear();
             Assert.That(writer.ToJsonString(), Is.EqualTo("[]"));
             
             writer.WriteShort(short.MaxValue);
@@ -35,18 +35,18 @@ namespace OrderedSerializer.UT
             writer.WriteLong(long.MaxValue);
             Assert.That(writer.ToJsonString(), Is.EqualTo("[32767,-2147483648,9223372036854775807]"));
             
-            writer.Reset();
+            writer.Clear();
             writer.WriteFloat(0.1f);
             writer.WriteDouble(0.2);
             Assert.That(writer.ToJsonString(), Is.EqualTo("[0.1,0.2]"));
             
-            writer.Reset();
+            writer.Clear();
             writer.WriteString(null);
             writer.WriteString("hello");
             writer.WriteString("");
             Assert.That(writer.ToJsonString(), Is.EqualTo("[null,\"hello\",\"\"]"));
             
-            writer.Reset();
+            writer.Clear();
             writer.WriteInt(7);
             {
                 writer.BeginSection();

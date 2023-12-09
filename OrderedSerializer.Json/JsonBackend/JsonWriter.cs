@@ -30,7 +30,7 @@ namespace OrderedSerializer.JsonBackend
             return _root;
         }
 
-        public void Reset()
+        public void Clear()
         {
             _currentSection = new JsonArray();
             _root = _currentSection;
