@@ -9,6 +9,7 @@ namespace OrderedSerializer
         private readonly ITypeDeserializer _typeDeserializer;
 
         private readonly List<IConstructor?> _typeMap = new List<IConstructor?>();
+        private readonly List<IConstructor> _defaultTypeMap = new List<IConstructor>();
 
         private readonly Stack<byte> _versions = new Stack<byte>();
         private byte _version;
@@ -33,10 +34,15 @@ namespace OrderedSerializer
             Prepare();
         }
 
-        public void Prepare(IReadOnlyList<Type>? defaultTypes = null)
+        public void Prepare(Func<int, IReadOnlyList<Type>>? defaultTypeSetProvider = null)
         {
             if (_reader.ReadByte() != 1)
+            {
                 throw new InvalidOperationException();
+            }
+
+            int defaultTypeSetVersion = _reader.ReadInt();
+
             switch (_reader.ReadByte())
             {
                 case 0:
@@ -47,15 +53,23 @@ namespace OrderedSerializer
             }
             
             _versions.Clear();
+            _version = 0;
+            
             _typeMap.Clear();
-            if (defaultTypes != null)
+            _defaultTypeMap.Clear();
+            
+            if (defaultTypeSetVersion >= 0)
             {
-                for (int i = 0; i < defaultTypes.Count; ++i)
+                if (defaultTypeSetProvider == null)
                 {
-                    _typeMap.Add(TypeConstructorBuilder.Build(defaultTypes[i]));
+                    throw new InvalidOperationException();
+                }
+                var defaultTypeSet = defaultTypeSetProvider(defaultTypeSetVersion);
+                for (var i = 0; i < defaultTypeSet.Count; ++i)
+                {
+                    _defaultTypeMap.Add(TypeConstructorBuilder.Build(defaultTypeSet[i]));
                 }
             }
-            _version = 0;
         }
         public void AddStruct<T>(ref T value)
             where T : struct, IDataStruct
@@ -81,37 +95,45 @@ namespace OrderedSerializer
             if (flag == 0) // NULL
             {
                 value = null;
+                return;
             }
-            else if (flag > 0) // NEW INSTANCE
-            {
-                int typeId = flag - 1;
 
+            IConstructor ctor;
+            if (flag > 0)
+            {   // dynamic type
+                int typeId = flag - 1;
                 while (typeId >= _typeMap.Count)
                 {
                     _typeMap.Add(null);
                 }
 
-                IConstructor? ctor = _typeMap[typeId];
-                if (ctor == null)
+                IConstructor? dynamicTypeCtor = _typeMap[typeId];
+                if (dynamicTypeCtor == null)
                 {
                     var type = _typeDeserializer.Deserialize(_reader);
-                    ctor = type != null ? TypeConstructorBuilder.Build(type) : NullConstructor.Instance;
-                    _typeMap[typeId] = ctor;
+                    dynamicTypeCtor = type != null ? TypeConstructorBuilder.Build(type) : NullConstructor.Instance;
+                    _typeMap[typeId] = dynamicTypeCtor;
 
-                    if (!ctor.IsValid)
+                    if (!dynamicTypeCtor.IsValid)
                     {
                         OnException?.Invoke(new InvalidOperationException($"Failed to construct '{type}'. It must have private or public default constructor"));
                     }
                 }
 
-                _reader.BeginSection();
+                ctor = dynamicTypeCtor;
+            }
+            else
+            {   // default type
+                ctor = _defaultTypeMap[-(flag + 1)];
+            }
 
-                value = DeserializeClass<T>(ctor);
+            _reader.BeginSection();
 
-                if (!_reader.EndSection())
-                {
-                    OnException?.Invoke(new InvalidOperationException("Failed to deserialize object section. Skip it"));
-                }
+            value = DeserializeClass<T>(ctor);
+
+            if (!_reader.EndSection())
+            {
+                OnException?.Invoke(new InvalidOperationException("Failed to deserialize object section. Skip it"));
             }
         }
 

@@ -9,6 +9,7 @@ namespace OrderedSerializer
         private readonly ITypeSerializer _typeSerializer;
 
         private readonly Dictionary<Type, short> _typeMap = new Dictionary<Type, short>();
+        private short _nextDynamicTypeId;
 
         private readonly Stack<byte> _versionStack = new Stack<byte>();
         private byte _version;
@@ -32,19 +33,28 @@ namespace OrderedSerializer
             Prepare();
         }
         
-        public void Prepare(IReadOnlyList<Type>? defaultTypes = null)
+        public void Prepare(int defaultTypeSetVersion = 0, IReadOnlyList<Type>? defaultTypeSet = null)
         {
-            _writer.WriteByte(1); // Protocol type Id == 1
-            _writer.WriteByte(0); // Protocol internal version
-            _version = 0;
-            _typeMap.Clear();
-            if (defaultTypes != null)
+            if (defaultTypeSetVersion < 0)
             {
-                for (int i = 0; i < defaultTypes.Count; ++i)
+                throw new InvalidOperationException(nameof(defaultTypeSetVersion) + " can't be negative");
+            }
+            
+            _typeMap.Clear();
+            _nextDynamicTypeId = 1;
+            if (defaultTypeSet != null)
+            {
+                for (int i = 0; i < defaultTypeSet.Count; ++i)
                 {
-                    _typeMap.Add(defaultTypes[i], (short)(i + 1));
+                    _typeMap.Add(defaultTypeSet[i], (short)(-i - 1));
                 }
             }
+            
+            _writer.WriteByte(1); // Protocol type Id == 1
+            _writer.WriteInt(defaultTypeSet != null ? defaultTypeSetVersion : -1);
+            _writer.WriteByte(0); // Protocol internal version
+            _version = 0;
+            
             _versionStack.Clear();
         }
 
@@ -113,11 +123,7 @@ namespace OrderedSerializer
         {
             if (!_typeMap.TryGetValue(type, out short typeId))
             {
-                typeId = (short)_typeMap.Count;
-                checked
-                {
-                    typeId += 1;
-                }
+                typeId = checked(_nextDynamicTypeId++);
 
                 if (null == type.GetConstructor(
                         BindingFlags.CreateInstance |

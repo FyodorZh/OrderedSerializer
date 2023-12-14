@@ -20,8 +20,15 @@ namespace OrderedSerializer.UT
                 typeof(B)
             };
             
-            serializer.Prepare(defaultTypes);
-            deserializer.Prepare(defaultTypes);
+            serializer.Prepare(3, defaultTypes);
+            deserializer.Prepare(version =>
+            {
+                if (version != 3)
+                {
+                    throw new Exception();
+                }
+                return defaultTypes;
+            });
             
             {
                 A? a = new A() { Data = 7 };
