@@ -18,7 +18,12 @@ namespace OrderedSerializer
 
         public byte Version => _version;
 
-        public HierarchicalSerializer(IWriter writer, ITypeSerializer typeSerializer, ISerializerExtensionsFactory? factory = null)
+        public HierarchicalSerializer(
+            IWriter writer, 
+            ITypeSerializer typeSerializer, 
+            ISerializerExtensionsFactory? factory = null,
+            int defaultTypeSetVersion = 0, 
+            IReadOnlyList<Type>? defaultTypeSet = null)
             : base(writer)
         {
             factory ??= SerializerExtensionsFactory.Instance;
@@ -30,7 +35,7 @@ namespace OrderedSerializer
             _factory = factory;
 
             _typeSerializer = typeSerializer;
-            Prepare();
+            Prepare(defaultTypeSetVersion, defaultTypeSet);
         }
         
         public void Prepare(int defaultTypeSetVersion = 0, IReadOnlyList<Type>? defaultTypeSet = null)

@@ -20,7 +20,11 @@ namespace OrderedSerializer
 
         public byte Version => _version;
         
-        public HierarchicalDeserializer(IReader reader, ITypeDeserializer typeDeserializer, ISerializerExtensionsFactory? factory = null)
+        public HierarchicalDeserializer(
+            IReader reader, 
+            ITypeDeserializer typeDeserializer, 
+            ISerializerExtensionsFactory? factory = null,
+            Func<int, IReadOnlyList<Type>>? defaultTypeSetProvider = null)
             : base(reader)
         {
             factory ??= SerializerExtensionsFactory.Instance;
@@ -31,7 +35,7 @@ namespace OrderedSerializer
             _factory = factory;
 
             _typeDeserializer = typeDeserializer;
-            Prepare();
+            Prepare(defaultTypeSetProvider);
         }
 
         public void Prepare(Func<int, IReadOnlyList<Type>>? defaultTypeSetProvider = null)
