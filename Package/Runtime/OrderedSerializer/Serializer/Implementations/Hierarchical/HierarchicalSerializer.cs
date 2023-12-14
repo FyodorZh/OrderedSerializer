@@ -32,12 +32,19 @@ namespace OrderedSerializer
             Prepare();
         }
         
-        public void Prepare()
+        public void Prepare(IReadOnlyList<Type>? defaultTypes = null)
         {
             _writer.WriteByte(1); // Protocol type Id == 1
             _writer.WriteByte(0); // Protocol internal version
             _version = 0;
             _typeMap.Clear();
+            if (defaultTypes != null)
+            {
+                for (int i = 0; i < defaultTypes.Count; ++i)
+                {
+                    _typeMap.Add(defaultTypes[i], (short)(i + 1));
+                }
+            }
             _versionStack.Clear();
         }
 

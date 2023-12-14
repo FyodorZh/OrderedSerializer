@@ -33,7 +33,7 @@ namespace OrderedSerializer
             Prepare();
         }
 
-        public void Prepare()
+        public void Prepare(IReadOnlyList<Type>? defaultTypes = null)
         {
             if (_reader.ReadByte() != 1)
                 throw new InvalidOperationException();
@@ -48,6 +48,13 @@ namespace OrderedSerializer
             
             _versions.Clear();
             _typeMap.Clear();
+            if (defaultTypes != null)
+            {
+                for (int i = 0; i < defaultTypes.Count; ++i)
+                {
+                    _typeMap.Add(TypeConstructorBuilder.Build(defaultTypes[i]));
+                }
+            }
             _version = 0;
         }
         public void AddStruct<T>(ref T value)
