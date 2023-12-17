@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net8.0</TargetFramework>
+        <TargetFramework>netstandard2.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <Authors>Fyodor Zhmaev</Authors>
@@ -10,6 +10,8 @@
         <Product>Archivarius</Product>
         <Version>0.1.0-dev.0</Version>
         <Title>Archivarius</Title>
+        <PackageReadmeFile>nuget.readme.md</PackageReadmeFile>
+        <LangVersion>12</LangVersion>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
@@ -19,5 +21,9 @@
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
       <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     </PropertyGroup>
+    
+    <ItemGroup>
+        <None Include="nuget.readme.md" Pack="true" PackagePath="\"/>
+    </ItemGroup>
 
 </Project>
