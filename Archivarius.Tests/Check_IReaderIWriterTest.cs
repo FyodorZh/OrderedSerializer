@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿
 using NUnit.Framework;
-using OrderedSerializer.BinaryBackend;
 using OrderedSerializer.JsonBackend;
 using OrderedSerializer.StructuredBinaryBackend;
+using BinaryWriter = OrderedSerializer.BinaryBackend.BinaryWriter;
+using BinaryReader = OrderedSerializer.BinaryBackend.BinaryReader;
 
 namespace OrderedSerializer.UT
 {
