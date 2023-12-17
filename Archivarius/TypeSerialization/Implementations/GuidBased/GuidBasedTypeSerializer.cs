@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
-namespace OrderedSerializer.TypeSerializers
+namespace Archivarius.TypeSerializers
 {
     public class GuidBasedTypeSerializer : ITypeSerializer
     {

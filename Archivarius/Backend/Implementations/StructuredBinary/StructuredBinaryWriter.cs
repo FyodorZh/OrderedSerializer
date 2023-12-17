@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace OrderedSerializer.StructuredBinaryBackend
+namespace Archivarius.StructuredBinaryBackend
 {
     public class StructuredBinaryWriter : IWriter
     {

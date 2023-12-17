@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace OrderedSerializer
+namespace Archivarius
 {
     public class HashSetSerializerExtension<T> : ISerializerExtension<HashSet<T>?>
     {

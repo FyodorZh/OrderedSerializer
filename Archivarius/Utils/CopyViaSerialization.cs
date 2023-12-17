@@ -1,7 +1,7 @@
 using System;
-using OrderedSerializer.TypeSerializers;
+using Archivarius.TypeSerializers;
 
-namespace OrderedSerializer
+namespace Archivarius
 {
     internal static class CopyViaSerialization
     {

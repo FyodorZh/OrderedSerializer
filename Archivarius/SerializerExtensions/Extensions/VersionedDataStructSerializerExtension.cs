@@ -1,4 +1,4 @@
-﻿namespace OrderedSerializer
+﻿namespace Archivarius
 {
     public class VersionedDataStructSerializerExtension<T> : ISerializerExtension<T>
         where T : struct, IVersionedDataStruct

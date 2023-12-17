@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace OrderedSerializer.TypeSerializers
+namespace Archivarius.TypeSerializers
 {
     public class TypenameBasedTypeDeserializer : ITypeDeserializer
     {

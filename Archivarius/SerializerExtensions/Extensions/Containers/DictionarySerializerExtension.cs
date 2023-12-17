@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace OrderedSerializer
+namespace Archivarius
 {
     public class DictionarySerializerExtension<TKey, TValue> : ISerializerExtension<Dictionary<TKey, TValue>?>
     {

@@ -1,9 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Text.Json;
 using System.Text.Json.Nodes;
 
-namespace OrderedSerializer.JsonBackend
+namespace Archivarius.JsonBackend
 {
     public class JsonReader : IReader
     {

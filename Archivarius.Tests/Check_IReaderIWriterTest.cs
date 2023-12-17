@@ -1,11 +1,9 @@
 ﻿
+using Archivarius.JsonBackend;
+using Archivarius.StructuredBinaryBackend;
 using NUnit.Framework;
-using OrderedSerializer.JsonBackend;
-using OrderedSerializer.StructuredBinaryBackend;
-using BinaryWriter = OrderedSerializer.BinaryBackend.BinaryWriter;
-using BinaryReader = OrderedSerializer.BinaryBackend.BinaryReader;
 
-namespace OrderedSerializer.UT
+namespace Archivarius.Tests
 {
     [TestFixture]
     public class Check_IReaderIWriterTest
@@ -13,11 +11,11 @@ namespace OrderedSerializer.UT
         [Test]
         public void Test_Binary()
         {
-            Check(GetList(), () => new BinaryWriter(), w =>
+            Check(GetList(), () => new BinaryBackend.BinaryWriter(), w =>
             {
-                BinaryWriter bw = (BinaryWriter)w;
+                BinaryBackend.BinaryWriter bw = (BinaryBackend.BinaryWriter)w;
                 var buffer = bw.GetBuffer();
-                return new BinaryReader(buffer);
+                return new BinaryBackend.BinaryReader(buffer);
             });
         }
 

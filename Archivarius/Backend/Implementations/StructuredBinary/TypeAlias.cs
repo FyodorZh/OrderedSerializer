@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace OrderedSerializer.StructuredBinaryBackend
+namespace Archivarius.StructuredBinaryBackend
 {
     [StructLayout(LayoutKind.Explicit)]
     public struct TypeAlias

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.InteropServices;
 
-namespace OrderedSerializer.TypeSerializers
+namespace Archivarius.TypeSerializers
 {
     public class GuidBasedTypeDeserializer : ITypeDeserializer
     {

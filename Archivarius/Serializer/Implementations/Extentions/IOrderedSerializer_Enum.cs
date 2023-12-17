@@ -1,6 +1,6 @@
 using System;
 
-namespace OrderedSerializer
+namespace Archivarius
 {
     public static partial class IOrderedSerializer_Ext // Enums
     {

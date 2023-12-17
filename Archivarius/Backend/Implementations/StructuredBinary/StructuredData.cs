@@ -1,4 +1,4 @@
-﻿namespace OrderedSerializer.StructuredBinaryBackend
+﻿namespace Archivarius.StructuredBinaryBackend
 {
     public class StructuredData
     {

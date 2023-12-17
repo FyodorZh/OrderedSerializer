@@ -1,8 +1,8 @@
 using System;
+using Archivarius.JsonBackend;
 using NUnit.Framework;
-using OrderedSerializer.JsonBackend;
 
-namespace OrderedSerializer.UT
+namespace Archivarius.Tests
 {
     public class Check_JsonBackend
     {

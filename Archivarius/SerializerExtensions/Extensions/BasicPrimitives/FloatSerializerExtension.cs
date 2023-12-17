@@ -1,4 +1,4 @@
-﻿namespace OrderedSerializer
+﻿namespace Archivarius
 {
     public class FloatSerializerExtension : ISerializerExtension<float>
     {

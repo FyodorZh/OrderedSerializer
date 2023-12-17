@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace OrderedSerializer
+namespace Archivarius
 {
     public class HierarchicalSerializer : PrimitiveSerializer, IOrderedSerializer
     {

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace OrderedSerializer
+namespace Archivarius
 {
     public static partial class IOrderedSerializer_Ext // Nullable
     {

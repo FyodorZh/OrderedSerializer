@@ -1,7 +1,7 @@
 using System;
 using NUnit.Framework;
 
-namespace OrderedSerializer.UT
+namespace Archivarius.Tests
 {
     [TestFixture]
     public class Check_DefaultTypes

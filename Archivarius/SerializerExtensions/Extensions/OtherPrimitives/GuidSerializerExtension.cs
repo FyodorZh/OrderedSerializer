@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace OrderedSerializer
+namespace Archivarius
 {
     public class GuidSerializerExtension : ISerializerExtension<Guid>
     {

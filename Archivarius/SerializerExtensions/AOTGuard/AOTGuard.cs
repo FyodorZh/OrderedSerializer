@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 
-namespace OrderedSerializer
+namespace Archivarius
 {
     public interface IAOTGuardChecker
     {

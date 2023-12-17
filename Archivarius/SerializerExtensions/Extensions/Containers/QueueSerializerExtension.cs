@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace OrderedSerializer
+namespace Archivarius
 {
     public class QueueSerializerExtension<T> : ISerializerExtension<Queue<T>?>
     {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace OrderedSerializer
+namespace Archivarius
 {
     public class DateTimeSerializerExtension : ISerializerExtension<DateTime>
     {

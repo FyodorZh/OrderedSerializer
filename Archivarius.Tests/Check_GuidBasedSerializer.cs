@@ -1,10 +1,10 @@
 using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using Archivarius.TypeSerializers;
 using NUnit.Framework;
-using OrderedSerializer.TypeSerializers;
 
-namespace OrderedSerializer.UT
+namespace Archivarius.Tests
 {
     public class Check_GuidBasedSerializer
     {

@@ -1,8 +1,7 @@
-using System.Buffers.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 
-namespace OrderedSerializer.JsonBackend
+namespace Archivarius.JsonBackend
 {
     public class JsonWriter : IWriter
     {

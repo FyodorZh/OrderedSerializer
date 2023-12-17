@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
+using Archivarius.StructuredBinaryBackend;
+using Archivarius.TypeSerializers;
 using NUnit.Framework;
-using OrderedSerializer.StructuredBinaryBackend;
-using OrderedSerializer.TypeSerializers;
 
-namespace OrderedSerializer.UT
+namespace Archivarius.Tests
 {
     public struct SA : IDataStruct
     {
