@@ -32,7 +32,7 @@ namespace Archivarius.TypeSerializers
             {
                 if (type.IsClass && _dataStructType.IsAssignableFrom(type))
                 {
-                    var attribute = (GuidAttribute)Attribute.GetCustomAttribute(type, typeof(GuidAttribute), false);
+                    var attribute = Attribute.GetCustomAttribute(type, typeof(GuidAttribute), false) as GuidAttribute;
                     if (attribute != null && Guid.TryParse(attribute.Value, out _))
                     {
                         _types.Add(attribute.Value, type);
@@ -48,7 +48,7 @@ namespace Archivarius.TypeSerializers
                 throw new InvalidOperationException($"{type} must be a class that is inherited from IDataStruct");
             }
 
-            var attribute = (GuidAttribute)Attribute.GetCustomAttribute(type, typeof(GuidAttribute), false);
+            var attribute = Attribute.GetCustomAttribute(type, typeof(GuidAttribute), false) as GuidAttribute;
             if (attribute == null || !Guid.TryParse(attribute.Value, out _))
             {
                 throw new InvalidOperationException($"{type} must have valid GUID");

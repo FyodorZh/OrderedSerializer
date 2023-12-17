@@ -7,11 +7,17 @@
 
         <IsPackable>false</IsPackable>
         <IsTestProject>true</IsTestProject>
-        <Authors>Fyodor Zhmayev</Authors>
+        <Authors>Fyodor Zhmaev</Authors>
         <Company>FyodorZh</Company>
+        <Version>0.1.0-dev.0</Version>
+        <Title>Archivarius.Tests</Title>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+      <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
       <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     </PropertyGroup>
 

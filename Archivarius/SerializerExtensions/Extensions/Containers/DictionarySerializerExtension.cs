@@ -1,8 +1,7 @@
-﻿using System.Collections.Generic;
-
-namespace Archivarius
+﻿namespace Archivarius
 {
     public class DictionarySerializerExtension<TKey, TValue> : ISerializerExtension<Dictionary<TKey, TValue>?>
+        where TKey : notnull
     {
         private readonly ISerializerExtension<TKey> _keySerializer;
         private readonly ISerializerExtension<TValue> _valueSerializer;

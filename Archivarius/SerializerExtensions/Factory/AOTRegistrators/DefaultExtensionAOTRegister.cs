@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Archivarius
+﻿namespace Archivarius
 {
     internal class DefaultExtensionAOTRegister // : IExtensionsAOTRegister
     {
@@ -36,12 +34,29 @@ namespace Archivarius
         }
 
         private void F<T1, T2>()
+            where T1 : notnull
+            where T2 : notnull
         {
             AOTGuard.Instance.RegisterType(new DictionarySerializerExtension<T1, T2>(null!, null!));
             AOTGuard.Instance.RegisterType(new DictionarySerializerExtension<T2, T1>(null!, null!));
         }
 
         private void F<TKey, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>()
+            where TKey : notnull
+            where T1 : notnull
+            where T2 : notnull
+            where T3 : notnull
+            where T4 : notnull
+            where T5 : notnull
+            where T6 : notnull
+            where T7 : notnull
+            where T8 : notnull
+            where T9 : notnull
+            where T10 : notnull
+            where T11 : notnull
+            where T12 : notnull
+            where T13 : notnull
+            where T14 : notnull
         {
             F<TKey, T1>();
             F<TKey, T2>();
@@ -60,6 +75,21 @@ namespace Archivarius
         }
 
         private void RegisterTypesInDictionary<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>()
+            where T1 : notnull
+            where T2 : notnull
+            where T3 : notnull
+            where T4 : notnull
+            where T5 : notnull
+            where T6 : notnull
+            where T7 : notnull
+            where T8 : notnull
+            where T9 : notnull
+            where T10 : notnull
+            where T11 : notnull
+            where T12 : notnull
+            where T13 : notnull
+            where T14 : notnull
+            where T15 : notnull
         {
             F<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>();
             F<T2, T1, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>();

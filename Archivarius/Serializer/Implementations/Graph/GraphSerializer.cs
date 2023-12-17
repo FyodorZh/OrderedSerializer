@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Archivarius
+﻿namespace Archivarius
 {
     public class GraphSerializer : HierarchicalSerializer
     {
@@ -31,7 +29,7 @@ namespace Archivarius
 
         private class ReferenceComparer : IEqualityComparer<object>
         {
-            bool IEqualityComparer<object>.Equals(object x, object y)
+            bool IEqualityComparer<object>.Equals(object? x, object? y)
             {
                 return ReferenceEquals(x, y);
             }

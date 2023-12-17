@@ -5,6 +5,7 @@
         public abstract void RegisterTypes();
 
         protected void RegisterKeyValuePair<TKey, TValue>()
+            where TKey : notnull
         {
             AOTGuard.Instance.RegisterType(new DictionarySerializerExtension<TKey, TValue>(null!, null!));
         }

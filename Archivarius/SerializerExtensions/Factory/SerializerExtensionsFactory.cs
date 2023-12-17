@@ -125,6 +125,10 @@ namespace Archivarius
                 {
                     typeof(ISerializerExtension<>).MakeGenericType(paramType)
                 });
+                if (realExtensionCtor == null)
+                {
+                    throw new InvalidOperationException();
+                }
                 return (ISerializerExtension)realExtensionCtor.Invoke(new Object[] { nestedExtension });
             }
 
@@ -206,7 +210,7 @@ namespace Archivarius
                     t = t.MakeGenericType(type);
                     _aotGuard?.CheckType(t);
 
-                    result = (ISerializerExtension)t.GetConstructor(Type.EmptyTypes).Invoke(Array.Empty<Object>());
+                    result = (ISerializerExtension)t.GetConstructor(Type.EmptyTypes)!.Invoke(Array.Empty<Object>());
 
                 }
                 else if (type.IsArray)
@@ -218,12 +222,12 @@ namespace Archivarius
                         ISerializerExtension? elementSerializer = elementType != null ? Construct(elementType) : null;
                         if (elementSerializer != null)
                         {
-                            Type t = typeof(ArraySerializerExtension<>).MakeGenericType(elementType);
+                            Type t = typeof(ArraySerializerExtension<>).MakeGenericType(elementType!);
                             _aotGuard?.CheckType(t);
                             result = (ISerializerExtension)t.GetConstructor(new Type[]
                                 {
-                                    typeof(ISerializerExtension<>).MakeGenericType(elementType)
-                                }).Invoke(new Object[] { elementSerializer });
+                                    typeof(ISerializerExtension<>)!.MakeGenericType(elementType!)
+                                })!.Invoke(new Object[] { elementSerializer });
                         }
                         else
                         {
@@ -285,14 +289,14 @@ namespace Archivarius
             Type register = typeof(IExtensionsAOTRegister);
             foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
             {
-                if (!assembly.GetName().Name.StartsWith("System"))
+                if (!assembly.GetName().Name!.StartsWith("System"))
                 {
                     foreach (var type in assembly.GetTypes())
                     {
                         if (type.IsClass && !type.IsAbstract && register.IsAssignableFrom(type))
                         {
-                            var obj = type.GetConstructor(Array.Empty<Type>()).Invoke(Array.Empty<Object>());
-                            type.GetMethod(nameof(IExtensionsAOTRegister.RegisterTypes)).Invoke(obj, Array.Empty<Object>());
+                            var obj = type.GetConstructor(Array.Empty<Type>())!.Invoke(Array.Empty<Object>());
+                            type.GetMethod(nameof(IExtensionsAOTRegister.RegisterTypes))!.Invoke(obj, Array.Empty<Object>());
                         }
                     }
                 }

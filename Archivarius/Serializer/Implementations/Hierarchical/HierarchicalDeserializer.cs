@@ -248,7 +248,7 @@ namespace Archivarius
                 {
                     Type genericCtor = typeof(TypeConstructor<>);
                     Type typeCtor = genericCtor.MakeGenericType(type);
-                    return (IConstructor)typeCtor.GetConstructor(Type.EmptyTypes).Invoke(Array.Empty<object>());
+                    return (IConstructor)typeCtor.GetConstructor(Type.EmptyTypes)!.Invoke(Array.Empty<object>());
                 }
 
                 return new ReflectionBasedConstructor(type);

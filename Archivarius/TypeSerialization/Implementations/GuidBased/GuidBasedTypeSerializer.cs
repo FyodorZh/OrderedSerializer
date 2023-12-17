@@ -46,9 +46,8 @@ namespace Archivarius.TypeSerializers
             {
                 return "String";
             }
-            
-            var attribute = (GuidAttribute)Attribute.GetCustomAttribute(type, typeof(GuidAttribute), false);
-            if (attribute == null)
+
+            if (Attribute.GetCustomAttribute(type, typeof(GuidAttribute), false) is not GuidAttribute attribute)
             {
                 throw new InvalidOperationException($"'{type}' must have GUID attribute");
             }

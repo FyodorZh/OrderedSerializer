@@ -6,7 +6,7 @@ namespace Archivarius.TypeSerializers
     {
         public void Serialize(IWriter writer, Type type)
         {
-            string typeName = type.AssemblyQualifiedName;
+            string typeName = type.AssemblyQualifiedName ?? throw new InvalidOperationException();
             writer.WriteString(typeName);
         }
     }
